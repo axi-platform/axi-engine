@@ -1,6 +1,6 @@
 {
-  "name": "axi-engine-core",
-  "description": "",
+  "name": "axi-engine",
+  "description": "Computational Engine for the Axi Platform.",
   "version": "0.0.0",
   "homepage": "",
   "main": "src",
@@ -37,11 +37,11 @@
     "cors": "^2.8.4",
     "helmet": "^3.12.0",
     "serve-favicon": "^2.4.5",
-    "winston": "^2.4.0"
+    "winston": "^3.0.0-rc2"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
-    "mocha": "^5.0.1",
+    "mocha": "^5.0.4",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   }
