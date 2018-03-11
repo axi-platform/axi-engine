@@ -1,29 +1,42 @@
 {
+  "parser": "babel-eslint",
+  "extends": [
+    "standard",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react",
+    "prettier/standard"
+  ],
+  "plugins": ["react", "prettier", "standard"],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "env": {
     "es6": true,
-    "node": true,
-    "mocha": true
+    "node": true
   },
-  "parserOptions": {
-    "ecmaVersion": 2017
-  },
-  "extends": "eslint:recommended",
   "rules": {
-    "indent": [
+    "prettier/prettier": [
       "error",
-      2
+      {
+        "printWidth": 80,
+        "tabWidth": 2,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "bracketSpacing": false,
+        "semi": false,
+        "useTabs": false,
+        "parser": "babylon",
+        "jsxBracketSameLine": true
+      }
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "eqeqeq": ["error", "always"],
+    "space-before-function-paren": 0,
+    "generator-star-spacing": 0,
+    "react/prop-types": 0,
+    "react/display-name": 0
   }
 }
