@@ -1,31 +1,24 @@
 {
   "name": "axi-engine",
   "description": "Computational Engine for the Axi Platform.",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
   "main": "src",
-  "keywords": [
-    "feathers"
-  ],
   "author": {
     "name": "Phoomparin Mano",
     "email": "work@phoom.in.th"
   },
   "contributors": [],
   "bugs": {},
-  "directories": {
-    "lib": "src",
-    "test": "test/"
-  },
   "engines": {
     "node": "^9.0.0",
     "yarn": ">= 0.18.0"
   },
   "scripts": {
-    "test": "yarn run eslint && yarn run mocha",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
-    "start": "node src/",
-    "mocha": "mocha test/ --recursive --exit"
+    "start": "npm run dev:watch | npm run dev:run",
+    "dev:watch": "webpack --watch",
+    "dev:run": "nodemon './dist/index.js' --watch './dist'",
+    "build": "NODE_ENV=PRODUCTION webpack"
   },
   "dependencies": {
     "@feathersjs/configuration": "^1.0.2",
@@ -34,12 +27,15 @@
     "@feathersjs/feathers": "^3.1.3",
     "@feathersjs/socketio": "^3.2.0",
     "compression": "^1.7.2",
+    "config": "^1.30.0",
     "cors": "^2.8.4",
     "helmet": "^3.12.0",
     "serve-favicon": "^2.4.5",
     "winston": "^3.0.0-rc2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
     "babel-eslint": "^8.2.2",
     "eslint": "^4.18.2",
     "eslint-config-prettier": "^2.9.0",
@@ -54,6 +50,8 @@
     "mocha": "^5.0.4",
     "prettier": "^1.11.1",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "webpack": "^4.0.0-beta.3",
+    "webpack-cli": "^2.0.11"
   }
 }
