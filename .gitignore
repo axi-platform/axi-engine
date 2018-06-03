@@ -113,3 +113,5 @@ data/
 
 # Persistent Storage for Docker
 storage
+storage/
+storage/*
