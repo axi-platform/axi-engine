@@ -12,8 +12,6 @@ const Ticket = sequelize.define('ticket', {
     allowNull: false,
     validate: {
       isSeat(seat) {
-        console.log('[+] Seat Validation:', seat)
-
         return true
       },
     },

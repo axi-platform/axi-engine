@@ -49,11 +49,22 @@ export async function queryTopics(pattern) {
   return topics.filter(x => pattern.test(x)).map(asTopic)
 }
 
-export class Processor {
-  constructor(topic, onProcess, onError) {
-    if (onProcess) this.onProcess = onProcess
-    if (onError) this.onError = onProcess
+// Custom Handler for Patterns
+const PatternHandler = (topic, handlers, callback) => {
+  handlers = [...handlers.keys()].filter(x => x[0] instanceof RegExp)
 
+  if (handlers.length > 0) {
+    handlers
+      .filter(x => x[0].test(topic) && x[1])
+      .map(handler => handler[1])
+      .forEach(callback)
+  }
+}
+
+export class Processor {
+  handlers = new Map()
+
+  constructor(topic) {
     this.setup(topic)
   }
 
@@ -70,15 +81,28 @@ export class Processor {
     this.consumer.on('offsetOutOfRange', this.onError)
   }
 
-  onProcess() {
-    console.log('[!] Please override onProcess()')
+  on = (event, handler) => {
+    this.handlers.set(event, handler)
   }
 
   onError(error) {
+    const handle = this.handlers.get('error')
+
+    if (handle) {
+      return handle(error)
+    }
+
     console.error('[!] Kafka Error:', error)
   }
 
   onMessage = ({topic, value, ...meta}) => {
-    this.onProcess(topic, msgpack.unpack(value), meta)
+    const payload = msgpack.unpack(value)
+    const handle = this.handlers.get(topic)
+
+    console.log('[?] Incoming Event:', topic, '=>', payload)
+
+    if (handle) handle(payload, meta)
+
+    PatternHandler(topic, this.handlers, h => h(payload, meta))
   }
 }

@@ -10,7 +10,9 @@ export default class SeatingService {
     await Ticket.sync()
 
     this.app = app
+
     this.processor = new Processor('queuing.ticket.*', this.process)
+    this.processor.on(TICKET_ADD, this.addTicket)
   }
 
   async find(params) {
@@ -43,14 +45,6 @@ export default class SeatingService {
     await send(TICKET_ADD, {buyer, seat})
 
     return {status: 'PROCESSING', seat, buyer}
-  }
-
-  process = async (topic, payload) => {
-    console.log('[?] Incoming Event:', topic, '=>', payload)
-
-    if (topic === TICKET_ADD) {
-      this.addTicket(payload)
-    }
   }
 
   async addTicket({seat, buyer}) {

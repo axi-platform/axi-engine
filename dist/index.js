@@ -2686,7 +2686,8 @@ exports.asTopic = asTopic;
 
 function queryTopics(_x) {
   return _queryTopics.apply(this, arguments);
-}
+} // Custom Handler for Patterns
+
 
 function _queryTopics() {
   _queryTopics = _asyncToGenerator(function* (pattern) {
@@ -2701,9 +2702,19 @@ function _queryTopics() {
   return _queryTopics.apply(this, arguments);
 }
 
+const PatternHandler = (topic, handlers, callback) => {
+  handlers = [...handlers.keys()].filter(x => x[0] instanceof RegExp);
+
+  if (handlers.length > 0) {
+    handlers.filter(x => x[0].test(topic) && x[1]).map(handler => handler[1]).forEach(callback);
+  }
+};
+
 class Processor {
-  constructor(_topic, onProcess, onError) {
+  constructor(_topic) {
     var _this = this;
+
+    this.handlers = new Map();
 
     this.setup =
     /*#__PURE__*/
@@ -2727,6 +2738,10 @@ class Processor {
       };
     }();
 
+    this.on = (event, handler) => {
+      this.handlers.set(event, handler);
+    };
+
     this.onMessage = (_ref2) => {
       let {
         topic,
@@ -2734,19 +2749,24 @@ class Processor {
       } = _ref2,
           meta = _objectWithoutProperties(_ref2, ["topic", "value"]);
 
-      this.onProcess(topic, _msgpack.default.unpack(value), meta);
+      const payload = _msgpack.default.unpack(value);
+
+      const handle = this.handlers.get(topic);
+      console.log('[?] Incoming Event:', topic, '=>', payload);
+      if (handle) handle(payload, meta);
+      PatternHandler(topic, this.handlers, h => h(payload, meta));
     };
 
-    if (onProcess) this.onProcess = onProcess;
-    if (onError) this.onError = onProcess;
     this.setup(_topic);
   }
 
-  onProcess() {
-    console.log('[!] Please override onProcess()');
-  }
-
   onError(error) {
+    const handle = this.handlers.get('error');
+
+    if (handle) {
+      return handle(error);
+    }
+
     console.error('[!] Kafka Error:', error);
   }
 
@@ -3017,7 +3037,6 @@ const Ticket = _index.default.define('ticket', {
     allowNull: false,
     validate: {
       isSeat(seat) {
-        console.log('[+] Seat Validation:', seat);
         return true;
       }
 
@@ -3105,33 +3124,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 const TICKET_ADD = 'queuing.ticket.add';
 
 class SeatingService {
-  constructor() {
-    var _this = this;
-
-    this.process =
-    /*#__PURE__*/
-    function () {
-      var _ref = _asyncToGenerator(function* (topic, payload) {
-        console.log('[?] Incoming Event:', topic, '=>', payload);
-
-        if (topic === TICKET_ADD) {
-          _this.addTicket(payload);
-        }
-      });
-
-      return function (_x, _x2) {
-        return _ref.apply(this, arguments);
-      };
-    }();
-  }
-
   setup(app) {
-    var _this2 = this;
+    var _this = this;
 
     return _asyncToGenerator(function* () {
       yield _ticket.default.sync();
-      _this2.app = app;
-      _this2.processor = new _kafka.Processor('queuing.ticket.*', _this2.process);
+      _this.app = app;
+      _this.processor = new _kafka.Processor('queuing.ticket.*', _this.process);
+
+      _this.processor.on(TICKET_ADD, _this.addTicket);
     })();
   }
 
