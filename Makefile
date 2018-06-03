@@ -1,2 +1,2 @@
 main:
-	yarn start
+	echo "--snip-- TODO: run daemons"
