@@ -3,7 +3,7 @@ import path from 'path'
 
 const sequelize = new Sequelize('sequelize', '', '', {
   dialect: 'sqlite',
-  storage: path.join(__dirname, 'db.sqlite'),
+  storage: path.resolve(__dirname, '../storage/db.sqlite'),
   logging: false,
   operatorsAliases: Sequelize.Op,
   pool: {

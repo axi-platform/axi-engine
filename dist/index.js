@@ -2972,7 +2972,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const sequelize = new _sequelize.default('sequelize', '', '', {
   dialect: 'sqlite',
-  storage: _path.default.join(__dirname, 'db.sqlite'),
+  storage: _path.default.resolve(__dirname, '../storage/db.sqlite'),
   logging: false,
   operatorsAliases: _sequelize.default.Op,
   pool: {
