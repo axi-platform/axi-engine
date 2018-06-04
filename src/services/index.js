@@ -1,16 +1,7 @@
-class HelloService {
-  async find(params) {
-    return {status: 200, data: 'Hello, World!'}
-  }
-}
-
-class QueuingService {
-  async find(params) {
-    return {status: 200, message: 'Queuing Service'}
-  }
-}
+import seating from './seating'
+import graphql from './graphql'
 
 export default async function(app) {
-  app.use('/hello', new HelloService())
-  app.use('/queue', new QueuingService())
+  app.configure(seating)
+  app.configure(graphql)
 }

@@ -43,7 +43,21 @@ app.hooks(hooks)
 const PORT = app.get('port')
 
 app.listen(PORT).on('listening', () => {
-  console.log('💖', `The Axi Engine is now listening on Port ${PORT}!`)
+  console.log('[💖]', `The Axi Engine is now listening on Port ${PORT}!`)
 })
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.warn('[!!] Unhandled Rejection:', reason, 'at:', promise)
+})
+
+function shutdown(code) {
+  console.log('[!] Shutting Down:', code)
+
+  process.exit()
+}
+
+const shutdownEvents = ['SIGINT', 'SIGQUIT', 'SIGTERM', 'SIGHUP', 'SIGSTP']
+
+shutdownEvents.forEach(event => process.on(event, shutdown))
 
 export default app
