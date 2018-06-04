@@ -5,7 +5,7 @@ import {Processor, send} from '../core/kafka'
 
 const TICKET_ADD = 'queuing.ticket.add'
 
-export default class SeatingService {
+export class SeatingService {
   async setup(app) {
     await Ticket.sync()
 
@@ -14,13 +14,13 @@ export default class SeatingService {
     this.processor.on(TICKET_ADD, this.addTicket)
   }
 
-  async find(params) {
+  async find() {
     const seats = await Ticket.findAll()
 
     return {seats}
   }
 
-  async get(seat, params) {
+  async get(seat) {
     const ticket = await Ticket.findOne({where: {seat}})
 
     if (!ticket) {
@@ -58,4 +58,8 @@ export default class SeatingService {
 
     console.log('[+] Seat', seat, 'has been bought by', buyer)
   }
+}
+
+export default function seating() {
+  this.use('/seating', new SeatingService())
 }

@@ -1,12 +1,7 @@
-import SeatingService from './seating'
-
-class HelloService {
-  async find(params) {
-    return {status: 200, data: 'Hello, World!'}
-  }
-}
+import seating from './seating'
+import graphql from './graphql'
 
 export default async function(app) {
-  app.use('/hello', new HelloService())
-  app.use('/seating', new SeatingService())
+  app.configure(seating)
+  app.configure(graphql)
 }

@@ -87,7 +87,7 @@ export class Processor {
     this.handlers.set(event, handler)
   }
 
-  onError(error) {
+  onError = error => {
     const handle = this.handlers.get('error')
 
     if (handle) {
