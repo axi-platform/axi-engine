@@ -2,6 +2,8 @@ import Sequelize from 'sequelize'
 
 import sequelize from './index'
 
+import {isSeat} from '../hooks/seating'
+
 const Ticket = sequelize.define('ticket', {
   buyer: {
     type: Sequelize.STRING,
@@ -10,11 +12,7 @@ const Ticket = sequelize.define('ticket', {
   seat: {
     type: Sequelize.STRING,
     allowNull: false,
-    validate: {
-      isSeat(seat) {
-        return true
-      },
-    },
+    validate: {isSeat},
   },
 })
 
