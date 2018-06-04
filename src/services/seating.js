@@ -1,6 +1,6 @@
 import errors from '@feathersjs/errors'
 
-import hooks, {isSeatAvailable} from '../hooks/seating'
+import hooks, {checkSeatAvailability} from '../hooks/seating'
 import Ticket from '../models/ticket'
 import {Processor, send} from '../core/kafka'
 
@@ -38,7 +38,7 @@ export class SeatingService {
   }
 
   async addTicket({seat, buyer}) {
-    await isSeatAvailable(seat)
+    await checkSeatAvailability(seat)
     await Ticket.create({seat, buyer})
 
     console.log('[+] Seat', seat, 'has been bought by', buyer)

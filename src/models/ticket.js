@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 
 import sequelize from './index'
 
-import {isSeat} from '../hooks/seating'
+import {checkSeatFormat} from '../hooks/seating'
 
 const Ticket = sequelize.define('ticket', {
   buyer: {
@@ -12,7 +12,7 @@ const Ticket = sequelize.define('ticket', {
   seat: {
     type: Sequelize.STRING,
     allowNull: false,
-    validate: {isSeat},
+    validate: {checkSeatFormat},
   },
 })
 

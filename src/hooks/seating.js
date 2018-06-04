@@ -2,6 +2,7 @@ import errors, {FeathersError} from '@feathersjs/errors'
 
 import Ticket from '../models/ticket'
 
+// When the seat's format is invalid
 export class SeatFormatError extends FeathersError {
   constructor(seat) {
     const message =
@@ -13,7 +14,17 @@ export class SeatFormatError extends FeathersError {
   }
 }
 
-export async function isSeatAvailable(seat) {
+// Check the seat format
+export function checkSeatFormat(seat) {
+  const SeatPattern = /^\w\d{1,3}$/
+
+  if (!SeatPattern.test(seat)) {
+    throw new SeatFormatError(seat)
+  }
+}
+
+// Determine if a seat is available.
+export async function checkSeatAvailability(seat) {
   const ticket = await Ticket.findOne({where: {seat}})
 
   if (ticket) {
@@ -24,34 +35,19 @@ export async function isSeatAvailable(seat) {
   return true
 }
 
-// Check the seat format
-export function isSeat(seat) {
-  const SeatPattern = /^\w\d{1,3}$/
-
-  if (!SeatPattern.test(seat)) {
-    throw new SeatFormatError(seat)
-  }
-}
-
-/*
-  Validation Hooks
-*/
-
-// Check if the required request parameters are filled
-export function validateBody({data}) {
-  if (!data.seat || !data.buyer) {
-    throw new errors.BadRequest('The seat and buyer fields are required.')
-  }
-}
-
-// Check if the seat format is correct
-export const validateSeatFormat = ctx => isSeat(ctx.data.seat)
-
-// Check if the seat is available
-export const checkSeatAvailability = async ctx => isSeatAvailable(ctx.data.seat)
-
 export default {
   before: {
-    create: [validateBody, validateSeatFormat, checkSeatAvailability],
+    async create({data: {seat, buyer}}) {
+      // Are the required parameters filled?
+      if (!seat || !buyer) {
+        throw new errors.BadRequest('The seat and buyer fields are required.')
+      }
+
+      // Is this a valid seat format?
+      checkSeatFormat(seat)
+
+      // Is this seat available?
+      checkSeatAvailability(seat)
+    },
   },
 }
