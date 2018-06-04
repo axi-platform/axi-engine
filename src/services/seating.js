@@ -10,7 +10,6 @@ export default class SeatingService {
     await Ticket.sync()
 
     this.app = app
-
     this.processor = new Processor('queuing.ticket.*')
     this.processor.on(TICKET_ADD, this.addTicket)
   }

@@ -115,3 +115,6 @@ data/
 storage
 storage/
 storage/*
+
+# Built Bundles
+dist
