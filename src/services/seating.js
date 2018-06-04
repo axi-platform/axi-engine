@@ -1,5 +1,6 @@
 import errors from '@feathersjs/errors'
 
+import hooks, {checkSeatAvailability} from '../hooks/seating'
 import Ticket from '../models/ticket'
 import {Processor, send} from '../core/kafka'
 
@@ -31,29 +32,13 @@ export class SeatingService {
   }
 
   async create({seat, buyer}) {
-    const ticket = await Ticket.findOne({where: {seat}})
-
-    if (!seat || !buyer) {
-      throw new errors.BadRequest('The seat and buyer fields are required.')
-    }
-
-    if (ticket) {
-      throw new errors.Unprocessable('This seat had been taken.')
-    }
-
     await send(TICKET_ADD, {buyer, seat})
 
     return {status: 'PROCESSING', seat, buyer}
   }
 
   async addTicket({seat, buyer}) {
-    const ticket = await Ticket.findOne({where: {seat}})
-
-    if (ticket) {
-      console.error('[!!] Seat', seat, 'had been taken by', ticket.buyer)
-      return
-    }
-
+    await checkSeatAvailability(seat)
     await Ticket.create({seat, buyer})
 
     console.log('[+] Seat', seat, 'has been bought by', buyer)
@@ -61,5 +46,7 @@ export class SeatingService {
 }
 
 export default function seating() {
-  this.use('/seating', new SeatingService())
+  this.use('seating', new SeatingService())
+
+  this.service('seating').hooks(hooks)
 }
