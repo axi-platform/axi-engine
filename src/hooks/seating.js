@@ -35,19 +35,22 @@ export async function checkSeatAvailability(seat) {
   return true
 }
 
+// Validate the data before creating a seating
+export async function validateCreationHook({data: {seat, buyer}}) {
+  // Are the required parameters filled?
+  if (!seat || !buyer) {
+    throw new errors.BadRequest('The seat and buyer fields are required.')
+  }
+
+  // Is this a valid seat format?
+  checkSeatFormat(seat)
+
+  // Is this seat available?
+  checkSeatAvailability(seat)
+}
+
 export default {
   before: {
-    async create({data: {seat, buyer}}) {
-      // Are the required parameters filled?
-      if (!seat || !buyer) {
-        throw new errors.BadRequest('The seat and buyer fields are required.')
-      }
-
-      // Is this a valid seat format?
-      checkSeatFormat(seat)
-
-      // Is this seat available?
-      checkSeatAvailability(seat)
-    },
+    create: [validateCreationHook],
   },
 }
