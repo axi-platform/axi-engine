@@ -23,7 +23,7 @@ export function checkSeatFormat(seat) {
   }
 }
 
-// Determine if a seat is available.
+// Check if the seat is currently available.
 export async function checkSeatAvailability(seat) {
   const ticket = await Ticket.findOne({where: {seat}})
 
@@ -31,8 +31,6 @@ export async function checkSeatAvailability(seat) {
     // prettier-ignore
     throw new errors.Unprocessable(`Seat ${seat} had been taken by ${ticket.buyer}.`)
   }
-
-  return true
 }
 
 // Validate the data before creating a seating
@@ -46,7 +44,7 @@ export async function validateCreationHook({data: {seat, buyer}}) {
   checkSeatFormat(seat)
 
   // Is this seat available?
-  checkSeatAvailability(seat)
+  await checkSeatAvailability(seat)
 }
 
 export default {
