@@ -2630,7 +2630,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.send = send;
 exports.loadTopics = loadTopics;
 exports.queryTopics = queryTopics;
-exports.Processor = exports.asTopic = exports.producer = exports.client = void 0;
+exports.Processor = exports.PatternHandler = exports.asTopic = exports.producer = exports.client = void 0;
 
 var _kafkaNode = __webpack_require__(/*! kafka-node */ "kafka-node");
 
@@ -2706,9 +2706,12 @@ const PatternHandler = (topic, handlers, callback) => {
   handlers = [...handlers.keys()].filter(x => x[0] instanceof RegExp);
 
   if (handlers.length > 0) {
+    console.log('[>] Pattern Handlers:', handlers);
     handlers.filter(x => x[0].test(topic) && x[1]).map(handler => handler[1]).forEach(callback);
   }
 };
+
+exports.PatternHandler = PatternHandler;
 
 class Processor {
   constructor(_topic) {
@@ -2752,9 +2755,8 @@ class Processor {
       const payload = _msgpack.default.unpack(value);
 
       const handle = this.handlers.get(topic);
-      console.log('[?] Incoming Event:', topic, '=>', payload);
-      if (handle) handle(payload, meta);
-      PatternHandler(topic, this.handlers, h => h(payload, meta));
+      console.log('[?] Event:', topic, '=>', payload);
+      if (handle) handle(payload, meta); // PatternHandler(topic, this.handlers, h => h(payload, meta))
     };
 
     this.setup(_topic);
@@ -3130,7 +3132,7 @@ class SeatingService {
     return _asyncToGenerator(function* () {
       yield _ticket.default.sync();
       _this.app = app;
-      _this.processor = new _kafka.Processor('queuing.ticket.*', _this.process);
+      _this.processor = new _kafka.Processor('queuing.ticket.*');
 
       _this.processor.on(TICKET_ADD, _this.addTicket);
     })();

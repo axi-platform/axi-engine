@@ -11,7 +11,7 @@ export default class SeatingService {
 
     this.app = app
 
-    this.processor = new Processor('queuing.ticket.*', this.process)
+    this.processor = new Processor('queuing.ticket.*')
     this.processor.on(TICKET_ADD, this.addTicket)
   }
 

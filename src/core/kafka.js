@@ -50,10 +50,12 @@ export async function queryTopics(pattern) {
 }
 
 // Custom Handler for Patterns
-const PatternHandler = (topic, handlers, callback) => {
+export const PatternHandler = (topic, handlers, callback) => {
   handlers = [...handlers.keys()].filter(x => x[0] instanceof RegExp)
 
   if (handlers.length > 0) {
+    console.log('[>] Pattern Handlers:', handlers)
+
     handlers
       .filter(x => x[0].test(topic) && x[1])
       .map(handler => handler[1])
@@ -99,10 +101,10 @@ export class Processor {
     const payload = msgpack.unpack(value)
     const handle = this.handlers.get(topic)
 
-    console.log('[?] Incoming Event:', topic, '=>', payload)
+    console.log('[?] Event:', topic, '=>', payload)
 
     if (handle) handle(payload, meta)
 
-    PatternHandler(topic, this.handlers, h => h(payload, meta))
+    // PatternHandler(topic, this.handlers, h => h(payload, meta))
   }
 }
