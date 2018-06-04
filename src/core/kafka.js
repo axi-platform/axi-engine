@@ -9,7 +9,9 @@ producer.on('ready', () => {
   console.log('[+] Producer is now ready.')
 })
 
-producer.on('error', console.error)
+producer.on('error', error => {
+  console.warn('[!!] Producer Error:', error)
+})
 
 export function send(topic, payload) {
   return new Promise((resolve, reject) => {

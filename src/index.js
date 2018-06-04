@@ -43,7 +43,11 @@ app.hooks(hooks)
 const PORT = app.get('port')
 
 app.listen(PORT).on('listening', () => {
-  console.log('💖', `The Axi Engine is now listening on Port ${PORT}!`)
+  console.log('[💖]', `The Axi Engine is now listening on Port ${PORT}!`)
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.warn('[!!] Unhandled Rejection:', reason, 'at:', promise)
 })
 
 function shutdown(code) {

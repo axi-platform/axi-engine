@@ -1,20 +1,21 @@
-# Ticket contains the seat number and the buyer's name
-type Ticket {
-  # Seat number such as "A5" or "C9"
-  seat: String
-
-  # Ticket Holder's name
-  buyer: String
+schema {
+  query: Query
+  mutation: Mutation
 }
 
+# The queries that can be requested
 type Query {
   # List every tickets
   tickets: [Ticket]
 
   # Retrieves a ticket corresponding with the seat
-  ticket(seat: String): Ticket
+  ticket(
+    # Seat number such as "A5" or "C9"
+    seat: String
+  ): Ticket
 }
 
+# The mutations that can be performed
 type Mutation {
   # Creates a ticket booking with seat number and buyer info
   createTicket(
@@ -26,7 +27,11 @@ type Mutation {
   ): Boolean
 }
 
-schema {
-  query: Query
-  mutation: Mutation
+# Ticket contains the seat number and the buyer's name
+type Ticket {
+  # Seat number such as "A5" or "C9"
+  seat: String!
+
+  # Ticket Holder's name
+  buyer: String!
 }
