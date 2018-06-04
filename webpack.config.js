@@ -5,8 +5,6 @@ const process = require('process')
 const mode =
   process.env.NODE_ENV === 'production' ? 'production' : 'development'
 
-const DEBUG = process.env.NODE_ENV !== 'production'
-
 const externals = fs.readdirSync('node_modules').reduce((acc, mod) => {
   if (mod === '.bin') return acc
 
@@ -30,30 +28,38 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-import-loader',
-      },
-      {
         test: /\.js$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        options: {
-          babelrc: false,
-          cacheDirectory: DEBUG,
-          plugins: [['@babel/plugin-proposal-class-properties', {loose: true}]],
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                targets: {
-                  node: '6.11.1',
-                },
-                shippedProposals: true,
-              },
-            ],
-          ],
-        },
+        use: [
+          'babel-inline-import-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              cacheDirectory: false,
+              plugins: [
+                ['@babel/plugin-proposal-class-properties', {loose: true}],
+                [
+                  'inline-import',
+                  {
+                    extensions: ['.gql', '.graphql'],
+                  },
+                ],
+              ],
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      node: '6.11.1',
+                    },
+                    shippedProposals: true,
+                  },
+                ],
+              ],
+            },
+          },
+        ],
       },
     ],
   },
