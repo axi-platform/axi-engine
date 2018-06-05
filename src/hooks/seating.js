@@ -1,4 +1,8 @@
+import auth from '@feathersjs/authentication'
+import checkPermissions from 'feathers-permissions'
 import errors, {FeathersError} from '@feathersjs/errors'
+
+import validate from './validate'
 
 import Ticket from '../models/ticket'
 
@@ -15,12 +19,14 @@ export class SeatFormatError extends FeathersError {
 }
 
 // Check the seat format
-export function checkSeatFormat(seat) {
-  const SeatPattern = /^\w\d{1,3}$/
+const SeatPattern = /^\w\d{1,3}$/
 
+export function checkSeatFormat(seat) {
   if (!SeatPattern.test(seat)) {
     throw new SeatFormatError(seat)
   }
+
+  return true
 }
 
 // Check if the seat is currently available.
@@ -33,22 +39,26 @@ export async function checkSeatAvailability(seat) {
   }
 }
 
-// Validate the data before creating a seating
-export async function validateCreationHook({data: {seat, buyer}}) {
-  // Are the required parameters filled?
-  if (!seat || !buyer) {
-    throw new errors.BadRequest('The seat and buyer fields are required.')
-  }
+const preventDuplicateSeat = async ctx => checkSeatAvailability(ctx.data.seat)
 
-  // Is this a valid seat format?
-  checkSeatFormat(seat)
-
-  // Is this seat available?
-  await checkSeatAvailability(seat)
-}
+// Input validation hooks
+const validateInput = validate({
+  seat: {
+    type: 'custom',
+    check: checkSeatFormat,
+  },
+  buyer: 'string',
+})
 
 export default {
   before: {
-    create: [validateCreationHook],
+    create: [
+      auth.hooks.authenticate(['jwt', 'local']),
+      checkPermissions({roles: ['admin']}),
+      validateInput,
+      preventDuplicateSeat,
+    ],
+    update: [validateInput],
+    patch: [validateInput],
   },
 }

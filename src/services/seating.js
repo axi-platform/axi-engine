@@ -8,8 +8,6 @@ const TICKET_ADD = 'queuing.ticket.add'
 
 export class SeatingService {
   async setup(app) {
-    await Ticket.sync()
-
     this.app = app
     this.processor = new Processor('queuing.ticket.*')
     this.processor.on(TICKET_ADD, this.addTicket)

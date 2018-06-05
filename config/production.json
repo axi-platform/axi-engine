@@ -1,4 +1,5 @@
 {
   "host": "axi-engine-app.feathersjs.com",
-  "port": "8080"
+  "port": "8080",
+  "secret": "pleasechangemefam"
 }
