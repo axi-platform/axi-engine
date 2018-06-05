@@ -1,3 +1,4 @@
+import checkPermissions from 'feathers-permissions'
 import errors, {FeathersError} from '@feathersjs/errors'
 
 import validate from './validate'
@@ -50,7 +51,11 @@ const validateInput = validate({
 
 export default {
   before: {
-    create: [validateInput, preventDuplicateSeat],
+    create: [
+      checkPermissions({roles: ['admin']}),
+      validateInput,
+      preventDuplicateSeat,
+    ],
     update: [validateInput],
     patch: [validateInput],
   },
