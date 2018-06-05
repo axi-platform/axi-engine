@@ -23,6 +23,7 @@
   "dependencies": {
     "@feathers-plus/graphql": "git+ssh://git@github.com:feathers-plus/graphql.git",
     "@feathersjs/authentication": "^2.1.6",
+    "@feathersjs/authentication-local": "^1.2.1",
     "@feathersjs/configuration": "^1.0.2",
     "@feathersjs/errors": "^3.3.0",
     "@feathersjs/express": "^1.2.0",
@@ -36,6 +37,7 @@
     "feathers-authentication-hooks": "^0.3.0",
     "feathers-hooks-common": "^4.11.1",
     "feathers-permissions": "^0.2.1",
+    "feathers-sequelize": "^3.1.1",
     "graphql-depth-limit": "^1.1.0",
     "graphql-tools": "^3.0.2",
     "helmet": "^3.12.0",
