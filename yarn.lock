@@ -663,6 +663,17 @@
     mongo-sql "4.0.2"
     traverse "0.6.6"
 
+"@feathersjs/authentication-jwt@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@feathersjs/authentication-jwt/-/authentication-jwt-2.0.1.tgz#ef13f869bd86bd702093265487c017443b4fef31"
+  dependencies:
+    "@feathersjs/errors" "^3.0.0"
+    debug "^3.1.0"
+    lodash.merge "^4.6.0"
+    lodash.omit "^4.5.0"
+    lodash.pick "^4.4.0"
+    passport-jwt "^4.0.0"
+
 "@feathersjs/authentication-local@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@feathersjs/authentication-local/-/authentication-local-1.2.1.tgz#e8101a7feb8ed9aa418047b957a04eb7958b5f6e"
@@ -5070,7 +5081,7 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
-jsonwebtoken@^8.0.0:
+jsonwebtoken@^8.0.0, jsonwebtoken@^8.2.0:
   version "8.2.2"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.2.2.tgz#76d7993fda79660d71bd0f933109e1f133734b20"
   dependencies:
@@ -6277,13 +6288,20 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
+passport-jwt@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/passport-jwt/-/passport-jwt-4.0.0.tgz#7f0be7ba942e28b9f5d22c2ebbb8ce96ef7cf065"
+  dependencies:
+    jsonwebtoken "^8.2.0"
+    passport-strategy "^1.0.0"
+
 passport-local@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-local/-/passport-local-1.0.0.tgz#1fe63268c92e75606626437e3b906662c15ba6ee"
   dependencies:
     passport-strategy "1.x.x"
 
-passport-strategy@1.x.x:
+passport-strategy@1.x.x, passport-strategy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
 

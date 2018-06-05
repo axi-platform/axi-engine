@@ -1,5 +1,6 @@
 import auth from '@feathersjs/authentication'
 import local from '@feathersjs/authentication-local'
+import jwt from '@feathersjs/authentication-jwt'
 
 import {secret} from 'config'
 
@@ -9,7 +10,6 @@ const authOptions = {
   header: 'Authorization',
   entity: 'user',
   service: 'users',
-  passReqToCallback: true,
   session: true,
   cookie: {
     enabled: true,
@@ -35,12 +35,16 @@ const localOptions = {
   passwordField: 'password',
   entityUsernameField: 'email',
   entityPasswordField: 'password',
-  passReqToCallback: true,
+  session: true,
+}
+
+const jwtOptions = {
   session: true,
 }
 
 export default function() {
   this.configure(auth(authOptions))
+  this.configure(jwt(jwtOptions))
   this.configure(local(localOptions))
 
   this.service('authentication').hooks({

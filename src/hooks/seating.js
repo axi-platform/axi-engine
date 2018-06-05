@@ -23,6 +23,8 @@ export function checkSeatFormat(seat) {
   if (!SeatPattern.test(seat)) {
     throw new SeatFormatError(seat)
   }
+
+  return true
 }
 
 // Check if the seat is currently available.

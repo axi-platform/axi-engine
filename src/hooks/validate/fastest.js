@@ -1,5 +1,5 @@
 import Validator from 'fastest-validator'
-import Errors from '@feathersjs/errors'
+import errors from '@feathersjs/errors'
 import utils from 'feathers-hooks-common'
 
 // {
@@ -29,7 +29,7 @@ export default function validate(schema, messages = {}) {
     const results = check(input)
 
     if (Array.isArray(results)) {
-      throw new Errors.BadRequest('Invalid request format.', {errors: results})
+      throw new errors.BadRequest('Invalid request format.', {errors: results})
     }
 
     next(null, hook)
