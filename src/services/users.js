@@ -7,7 +7,7 @@ import User from '../models/user'
 import validate from '../hooks/validate'
 
 async function defaultRole(ctx) {
-  ctx.data.role = 'member'
+  ctx.data.permissions = 'admin:*'
 }
 
 const validateInput = validate({

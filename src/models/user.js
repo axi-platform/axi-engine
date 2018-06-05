@@ -21,7 +21,8 @@ const User = sequelize.define('user', {
     allowNull: false,
     // validate: {checkPasswordStrength},
   },
-  role: {
+  // comma-separated permissions used in feathers-permissions
+  permissions: {
     type: Sequelize.STRING,
   },
 })

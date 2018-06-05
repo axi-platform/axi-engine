@@ -10,7 +10,7 @@ const authOptions = {
   header: 'Authorization',
   entity: 'user',
   service: 'users',
-  session: true,
+  session: false,
   cookie: {
     enabled: true,
     name: 'feathers-jwt',
@@ -35,11 +35,11 @@ const localOptions = {
   passwordField: 'password',
   entityUsernameField: 'email',
   entityPasswordField: 'password',
-  session: true,
+  session: false,
 }
 
 const jwtOptions = {
-  session: true,
+  session: false,
 }
 
 export default function() {

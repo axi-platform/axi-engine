@@ -1,3 +1,4 @@
+import auth from '@feathersjs/authentication'
 import checkPermissions from 'feathers-permissions'
 import errors, {FeathersError} from '@feathersjs/errors'
 
@@ -52,6 +53,7 @@ const validateInput = validate({
 export default {
   before: {
     create: [
+      auth.hooks.authenticate(['jwt', 'local']),
       checkPermissions({roles: ['admin']}),
       validateInput,
       preventDuplicateSeat,
