@@ -3,7 +3,7 @@ import {makeExecutableSchema} from 'graphql-tools'
 import depthLimit from 'graphql-depth-limit'
 import errors from '@feathersjs/errors'
 
-import Resolvers from './resolvers'
+import ServiceResolver from '../../core/graph-resolver'
 
 import Schema from './schema.gql'
 
@@ -17,21 +17,29 @@ function formatError(err) {
   return err
 }
 
+const config = {
+  seating: {
+    alias: 'tickets',
+    primary: 'seat',
+    methods: ['find', 'get', 'create'],
+  },
+}
+
 export default function graphql() {
   const app = this
 
   const executableSchema = makeExecutableSchema({
     typeDefs: Schema,
-    resolvers: Resolvers.call(app),
+    resolvers: ServiceResolver(app, config),
   })
 
   function handler(req) {
-    const {token, provider} = req.feathers
+    const {user, token, provider} = req.feathers
 
     return {
       formatError,
       schema: executableSchema,
-      context: {token, provider},
+      context: {user, token, provider},
       validationRules: [depthLimit(10)],
     }
   }

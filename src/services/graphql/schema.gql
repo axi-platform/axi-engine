@@ -24,11 +24,14 @@ type Mutation {
 
     # Ticket Holder's name
     buyer: String!
-  ): Boolean
+  ): Ticket
 }
 
 # Ticket contains the seat number and the buyer's name
 type Ticket {
+  # ID
+  id: ID!
+
   # Seat number such as "A5" or "C9"
   seat: String!
 
