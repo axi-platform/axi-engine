@@ -33,28 +33,27 @@ const mutationMethods = ['create', 'remove', 'patch', 'update']
 const feathersServiceMethods = [...queryMethods, ...mutationMethods]
 
 function generateMapping(name, options = {}) {
+  const defaultMapping = generateDefaultMapping(options.alias || name)
+
   // Use default method names if "options" is true
   if (options === true) {
-    return generateDefaultMapping(name)
+    return defaultMapping
   }
 
   // If options is an array of allowed methods
   if (Array.isArray(options)) {
-    return R.pick(options, generateDefaultMapping(name))
+    return R.pick(options, defaultMapping)
   }
 
   const customMethods = R.pick(feathersServiceMethods, options)
 
   // Disable generation of default mapping.
-  if (options.methods === false) {
+  if (!options.methods) {
     return customMethods
   }
 
   // Mapping is the default mapping overrided by custom methods
-  const mapping = {
-    ...generateDefaultMapping(options.alias || name),
-    ...customMethods,
-  }
+  const mapping = {...defaultMapping, ...customMethods}
 
   // Generate every single method
   if (options.methods === true) {
@@ -77,7 +76,7 @@ function createMappings(config) {
   }))
 }
 
-function createHandler(app, service, name, method, options = {}) {
+function createHandler(app, service, method, options = {}) {
   const {field = 'data'} = options
 
   const Service = app.service(service)
@@ -86,19 +85,30 @@ function createHandler(app, service, name, method, options = {}) {
   const handle = Service[method].bind(app)
 
   return async (root, data, context, info) => {
-    const params = {...context, provider: 'rest'}
+    data.user = context.user
+    data.provider = context.provider
+    context.path = service
+    context.service = service
 
     console.log('[>] Data is', data)
     console.log('[>] Context is', context)
 
-    // If options.primary is set, use it as GET's ID parameter
-    if (method === 'get' && !data.id && data[options.primary]) {
-      data = data[options.primary]
+    if (method === 'get') {
+      // If options.primary is set, use it as GET's ID parameter
+      if (!data.id && data[options.primary]) {
+        data = data[options.primary]
+      }
+
+      if (data.id) data = data.id
+    }
+
+    if (method === 'find') {
+      data = {query: data}
     }
 
     // Invoke the handler
-    const result = await handle(data, params)
-    console.log('[+] Result is', result)
+    const result = await handle(data, context)
+    // console.log('[+] Result is', result)
 
     if (!result) return null
     if (field === false) return result
@@ -107,22 +117,34 @@ function createHandler(app, service, name, method, options = {}) {
   }
 }
 
-function createServiceResolver(app, config) {
+function createServiceResolver(app, config, customResolver) {
   const mappings = createMappings(config)
 
-  const Query = {}
-  const Mutation = {}
+  let Query = {}
+  let Mutation = {}
 
+  // Generate GraphQL resolvers for the given mapping.
   mappings.forEach(({service, mapping, options}) => {
     console.debug('[+] Mapping', service, '->', mapping)
 
     Object.entries(mapping).forEach(([method, name]) => {
-      const handler = createHandler(app, service, name, method, options)
+      const handler = createHandler(app, service, method, options)
 
       if (queryMethods.includes(method)) Query[name] = handler
       if (mutationMethods.includes(method)) Mutation[name] = handler
     })
   })
+
+  // If custom resolvers are present, append them to the generated resolver.
+  if (customResolver) {
+    const custom = customResolver(app)
+
+    Query = {...Query, ...custom.Query}
+    Mutation = {...Mutation, ...custom.Mutation}
+  }
+
+  console.log('[Q]', Query)
+  console.log('[M]', Mutation)
 
   return {Query, Mutation}
 }

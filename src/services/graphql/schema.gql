@@ -13,6 +13,9 @@ type Query {
     # Seat number such as "A5" or "C9"
     seat: String
   ): Ticket
+
+  # Hello, World!
+  hello: String
 }
 
 # The mutations that can be performed

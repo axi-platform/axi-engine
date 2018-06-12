@@ -36,6 +36,7 @@
     "cors": "^2.8.4",
     "fastest-validator": "^0.6.7",
     "feathers-authentication-hooks": "^0.3.0",
+    "feathers-authentication-management": "^2.0.0",
     "feathers-hooks-common": "^4.11.1",
     "feathers-permissions": "^0.2.1",
     "feathers-sequelize": "^3.1.1",

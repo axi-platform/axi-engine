@@ -52,13 +52,20 @@ const validateInput = validate({
 
 export default {
   before: {
+    all: [hook => console.log('[+++] Hook BEFORE Ran!')],
     create: [
       auth.hooks.authenticate(['jwt', 'local']),
+      hook => console.log('User Hook:', hook.params.user),
       checkPermissions({roles: ['admin']}),
       validateInput,
       preventDuplicateSeat,
     ],
     update: [validateInput],
     patch: [validateInput],
+  },
+  after: {
+    all(ctx) {
+      console.log('[+++] Hook AFTER Ran!')
+    },
   },
 }

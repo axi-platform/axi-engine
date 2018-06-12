@@ -1,6 +1,14 @@
-import {send} from '../core/kafka'
+import {Processor, send} from '../core/kafka'
 
 export class QueueService {
+  async setup(app) {
+    this.app = app
+
+    this.processor = new Processor({
+      'queuing.ticket.add': this.addTicket,
+    })
+  }
+
   async find() {
     return {status: 'ACTIVE'}
   }

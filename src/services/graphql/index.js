@@ -17,6 +17,18 @@ function formatError(err) {
   return err
 }
 
+function resolver(app) {
+  const Seating = app.service('seating')
+
+  return {
+    Query: {
+      async hello(root, data, context, info) {
+        return JSON.stringify(await Seating.find())
+      },
+    },
+  }
+}
+
 const config = {
   seating: {
     alias: 'tickets',
@@ -30,16 +42,14 @@ export default function graphql() {
 
   const executableSchema = makeExecutableSchema({
     typeDefs: Schema,
-    resolvers: ServiceResolver(app, config),
+    resolvers: ServiceResolver(app, config, resolver),
   })
 
   function handler(req) {
-    const {user, token, provider} = req.feathers
-
     return {
       formatError,
       schema: executableSchema,
-      context: {user, token, provider},
+      context: req.feathers,
       validationRules: [depthLimit(10)],
     }
   }
