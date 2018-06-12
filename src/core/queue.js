@@ -9,7 +9,7 @@ export async function send(exchange, key, data) {
   const ch = await conn.createChannel()
   const message = msgpack.pack(data)
 
-  await ch.assertExchange(exchange, 'direct', {durable: false})
+  await ch.assertExchange(exchange, 'topic', {durable: false})
 
   return ch.publish(exchange, key, message)
 }
@@ -19,7 +19,7 @@ export async function consume(exchange, key, handle) {
   const conn = await open
   const ch = await conn.createChannel()
 
-  await ch.assertExchange(exchange, 'direct', {durable: false})
+  await ch.assertExchange(exchange, 'topic', {durable: false})
 
   const {queue} = await ch.assertQueue('', {exclusive: true})
   console.log('[>] Queue name:', queue)
@@ -28,7 +28,9 @@ export async function consume(exchange, key, handle) {
 
   async function handler(message) {
     const {content, ...meta} = message
-    await handle(msgpack.unpack(content), meta)
+    const data = msgpack.unpack(content)
+
+    await handle(data, meta.fields.routingKey, meta)
   }
 
   return ch.consume(queue, handler, {noAck: true})
