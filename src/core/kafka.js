@@ -25,6 +25,46 @@ export function send(topic, payload) {
   })
 }
 
+export const asTopic = topic => ({topic, offset: 0})
+
+export class Processor {
+  constructor(handlers) {
+    const topics = Object.keys(handlers).map(asTopic)
+
+    this.handlers = handlers || {}
+
+    console.log('[>] Topics', topics)
+
+    this.consumer = new Consumer(client, topics, {
+      autoCommit: true,
+      encoding: 'buffer',
+    })
+
+    this.consumer.on('message', this.onMessage)
+    this.consumer.on('error', this.onError)
+    this.consumer.on('offsetOutOfRange', this.onError)
+  }
+
+  onError = error => {
+    const handle = this.handlers.error
+
+    if (handle) {
+      return handle(error)
+    }
+
+    console.error('[!] Kafka Error:', error)
+  }
+
+  onMessage = ({topic, value, ...meta}) => {
+    const payload = msgpack.unpack(value)
+    const handle = this.handlers[topic]
+
+    console.log('[?] Event:', topic, '=>', payload)
+
+    if (handle) handle(payload, meta)
+  }
+}
+
 // Load all topics
 export function loadTopics() {
   return new Promise((resolve, reject) => {
@@ -37,8 +77,6 @@ export function loadTopics() {
     })
   })
 }
-
-export const asTopic = topic => ({topic, offset: 0})
 
 // Retrieves a list of topics that matches the pattern
 export async function queryTopics(pattern) {
@@ -62,51 +100,5 @@ export const PatternHandler = (topic, handlers, callback) => {
       .filter(x => x[0].test(topic) && x[1])
       .map(handler => handler[1])
       .forEach(callback)
-  }
-}
-
-export class Processor {
-  handlers = new Map()
-
-  constructor(topic) {
-    this.setup(topic)
-  }
-
-  setup = async topic => {
-    const topics = await queryTopics(topic)
-
-    this.consumer = new Consumer(client, topics, {
-      autoCommit: true,
-      encoding: 'buffer',
-    })
-
-    this.consumer.on('message', this.onMessage)
-    this.consumer.on('error', this.onError)
-    this.consumer.on('offsetOutOfRange', this.onError)
-  }
-
-  on = (event, handler) => {
-    this.handlers.set(event, handler)
-  }
-
-  onError = error => {
-    const handle = this.handlers.get('error')
-
-    if (handle) {
-      return handle(error)
-    }
-
-    console.error('[!] Kafka Error:', error)
-  }
-
-  onMessage = ({topic, value, ...meta}) => {
-    const payload = msgpack.unpack(value)
-    const handle = this.handlers.get(topic)
-
-    console.log('[?] Event:', topic, '=>', payload)
-
-    if (handle) handle(payload, meta)
-
-    // PatternHandler(topic, this.handlers, h => h(payload, meta))
   }
 }

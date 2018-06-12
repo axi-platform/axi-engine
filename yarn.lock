@@ -674,7 +674,7 @@
     lodash.pick "^4.4.0"
     passport-jwt "^4.0.0"
 
-"@feathersjs/authentication-local@^1.2.1":
+"@feathersjs/authentication-local@^1.0.4", "@feathersjs/authentication-local@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@feathersjs/authentication-local/-/authentication-local-1.2.1.tgz#e8101a7feb8ed9aa418047b957a04eb7958b5f6e"
   dependencies:
@@ -719,7 +719,7 @@
   dependencies:
     debug "^3.1.0"
 
-"@feathersjs/errors@^3.0.0", "@feathersjs/errors@^3.2.0", "@feathersjs/errors@^3.3.0":
+"@feathersjs/errors@^3.0.0", "@feathersjs/errors@^3.2.0", "@feathersjs/errors@^3.2.1", "@feathersjs/errors@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@feathersjs/errors/-/errors-3.3.0.tgz#c5fcc163f49d6b139f10d118eec36e8f90818aff"
   dependencies:
@@ -3561,6 +3561,26 @@ feathers-authentication-hooks@^0.3.0:
     debug "^3.1.0"
     lodash "^4.17.5"
 
+feathers-authentication-management@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/feathers-authentication-management/-/feathers-authentication-management-2.0.0.tgz#069d7b817e79b2e5ecb271196ac29b93914073c7"
+  dependencies:
+    "@feathersjs/authentication-local" "^1.0.4"
+    "@feathersjs/errors" "^3.2.1"
+    bcryptjs "^2.3.0"
+    debug "^3.0.0"
+    feathers-hooks-common "^3.0.0"
+
+feathers-commons@^0.8.6:
+  version "0.8.7"
+  resolved "https://registry.yarnpkg.com/feathers-commons/-/feathers-commons-0.8.7.tgz#11c6f25b537745a983e8d61552d7db8932d53782"
+
+feathers-errors@^2.4.0:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/feathers-errors/-/feathers-errors-2.9.2.tgz#96ca0e5fe50cc56f0eccc90ce3fa5e1f8840828d"
+  dependencies:
+    debug "^3.0.0"
+
 feathers-hooks-common@4.5.6:
   version "4.5.6"
   resolved "https://registry.yarnpkg.com/feathers-hooks-common/-/feathers-hooks-common-4.5.6.tgz#1fa4aecadb1b3d105aa98886bf88d8898af2e257"
@@ -3571,6 +3591,16 @@ feathers-hooks-common@4.5.6:
     ajv "^5.2.0"
     debug "^3.0.0"
     process "0.11.10"
+    traverse "^0.6.6"
+
+feathers-hooks-common@^3.0.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/feathers-hooks-common/-/feathers-hooks-common-3.10.0.tgz#2ae7dc54091ffa4609df8479c0bfa29dcd31d1a7"
+  dependencies:
+    ajv "^5.2.0"
+    debug "^3.0.0"
+    feathers-errors "^2.4.0"
+    feathers-hooks "^2.0.1"
     traverse "^0.6.6"
 
 feathers-hooks-common@^4.11.1:
@@ -3585,6 +3615,13 @@ feathers-hooks-common@^4.11.1:
     debug "^3.1.0"
     process "0.11.10"
     traverse "^0.6.6"
+
+feathers-hooks@^2.0.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/feathers-hooks/-/feathers-hooks-2.1.2.tgz#f97af10f38621df816d754766c5c2e180b7df951"
+  dependencies:
+    feathers-commons "^0.8.6"
+    uberproto "^1.2.0"
 
 feathers-permissions@^0.2.1:
   version "0.2.1"
@@ -6639,6 +6676,10 @@ querystring@0.2.0:
 radix-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/radix-router/-/radix-router-3.0.1.tgz#5522c829f7100e60c58fd1acf8803e0b2b312d97"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 randomatic@^1.1.3:
   version "1.1.7"
