@@ -1,10 +1,10 @@
-import {send, consume} from '../core/amqp'
+import {send, consume} from '../core/queue'
 
 export class QueueService {
   async setup(app) {
     this.app = app
 
-    await consume('queuing', this.handleQueue)
+    await consume('queue', this.handleQueue)
   }
 
   async find() {
@@ -13,7 +13,7 @@ export class QueueService {
 
   async create({data}) {
     try {
-      const result = await send('queuing', data)
+      const result = await send('queue', data)
 
       return {status: 'QUEUED', data, result}
     } catch (error) {
