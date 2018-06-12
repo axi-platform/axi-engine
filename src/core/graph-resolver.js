@@ -1,6 +1,8 @@
 import R from 'ramda'
 import pluralize from 'pluralize'
 
+import {pubsub} from '../services/graphql'
+
 const capitalize = text => text.charAt(0).toUpperCase() + text.substr(1)
 
 /*
@@ -16,15 +18,15 @@ const capitalize = text => text.charAt(0).toUpperCase() + text.substr(1)
 
 function generateDefaultMapping(service) {
   const entity = pluralize.singular(service)
-  const capService = capitalize(entity)
+  const capEntity = capitalize(entity)
 
   return {
     find: service,
     get: entity,
-    create: `create${capService}`,
-    remove: `remove${capService}`,
-    patch: `update${capService}`,
-    update: `replace${capService}`,
+    create: `create${capEntity}`,
+    remove: `remove${capEntity}`,
+    patch: `update${capEntity}`,
+    update: `replace${capEntity}`,
   }
 }
 
@@ -115,22 +117,69 @@ function createResolver(app, service, method, options = {}) {
   }
 }
 
+const events = {
+  create: 'created',
+  remove: 'removed',
+  patch: 'patched',
+  update: 'updated',
+}
+
+function generateEventName(method, entity, options = {}) {
+  const event = events[method]
+  let name = `${entity}${capitalize(event)}`
+
+  if (options[name]) {
+    name = options[name]
+  }
+
+  return {event, name}
+}
+
+const pprint = data => {
+  if (data.toJSON) return data.toJSON()
+
+  return data
+}
+
+function createSubscription(app, name, service, event) {
+  app.service(service).on(event, ({data}) => {
+    console.debug(`[+] ${name} (${service}.${event})`, pprint(data))
+
+    pubsub.publish(name, {[name]: data})
+  })
+
+  return {
+    subscribe: () => pubsub.asyncIterator(name),
+  }
+}
+
 // Automatically generate GraphQL resolvers for Feathers services.
 function createServiceResolvers(app, config, options = {}) {
   const mappings = createMappings(config)
 
   let Query = {}
   let Mutation = {}
+  let Subscription = {}
 
   // Generate GraphQL resolvers for the given mapping.
   mappings.forEach(({service, mapping, options}) => {
+    const entity = pluralize.singular(options.alias || service)
     console.debug('[+] Mapping', service, '->', mapping)
 
-    Object.entries(mapping).forEach(([method, name]) => {
+    Object.entries(mapping).forEach(([method, action]) => {
       const resolver = createResolver(app, service, method, options)
 
-      if (queryMethods.includes(method)) Query[name] = resolver
-      if (mutationMethods.includes(method)) Mutation[name] = resolver
+      if (queryMethods.includes(method)) {
+        Query[action] = resolver
+      }
+
+      if (mutationMethods.includes(method)) {
+        Mutation[action] = resolver
+
+        const {event, name} = generateEventName(method, entity, options)
+
+        Subscription[name] = createSubscription(app, name, service, event)
+      }
     })
   })
 
@@ -140,12 +189,14 @@ function createServiceResolvers(app, config, options = {}) {
 
     Query = {...Query, ...custom.Query}
     Mutation = {...Mutation, ...custom.Mutation}
+    Subscription = {...Subscription, ...custom.Subscription}
   }
 
-  console.log('[> Queries]', Query)
-  console.log('[> Mutations]', Mutation)
+  console.debug('[> Queries]', Query)
+  console.debug('[> Mutations]', Mutation)
+  console.debug('[> Subscriptions]', Subscription)
 
-  return {Query, Mutation}
+  return {Query, Mutation, Subscription}
 }
 
 export default createServiceResolvers
