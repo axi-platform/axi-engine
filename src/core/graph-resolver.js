@@ -176,9 +176,18 @@ function createServiceResolvers(app, config, options = {}) {
       if (mutationMethods.includes(method)) {
         Mutation[action] = resolver
 
-        const {event, name} = generateEventName(method, entity, options)
+        // Only create subscriptions to methods with
+        if (options.subscribe) {
+          if (Array.isArray(options.subscribe)) {
+            if (!options.subscribe.includes(method)) {
+              return
+            }
+          }
 
-        Subscription[name] = createSubscription(app, name, service, event)
+          const {event, name} = generateEventName(method, entity, options)
+
+          Subscription[name] = createSubscription(app, name, service, event)
+        }
       }
     })
   })

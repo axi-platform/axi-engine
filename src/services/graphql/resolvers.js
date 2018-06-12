@@ -6,6 +6,7 @@ const config = {
     alias: 'tickets',
     primary: 'seat',
     methods: ['find', 'get', 'create'],
+    subscribe: true,
   },
 }
 
