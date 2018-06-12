@@ -19,8 +19,10 @@ services:
     image: rabbitmq:3
     ports:
       - 1883:1883
+      - 5671:5671
       - 5672:5672
       - 15672:15672
+      - 15675:15675
     volumes:
       - ./config/rabbitmq_plugins:/etc/rabbitmq/enabled_plugins
       - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf

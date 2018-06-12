@@ -1,4 +1,5 @@
 import amqplib from 'amqplib'
+import msgpack from 'msgpack'
 
 const open = amqplib.connect('amqp://localhost')
 
@@ -9,9 +10,7 @@ export async function send(queue, data) {
 
   await ch.assertQueue(queue, {durable: false})
 
-  const message = Buffer.from(data)
-
-  return ch.sendToQueue(queue, message)
+  return ch.sendToQueue(queue, msgpack.pack(data))
 }
 
 // Consumer
@@ -21,5 +20,7 @@ export async function consume(queue, handler) {
 
   await ch.assertQueue(queue, {durable: false})
 
-  return ch.consume(queue, handler)
+  return ch.consume(queue, ({content, ...meta}) => {
+    handler(msgpack.unpack(content), meta)
+  })
 }
