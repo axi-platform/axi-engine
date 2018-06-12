@@ -1,6 +1,7 @@
-import seating from './seating'
-import graphql from './graphql'
 import auth from './auth'
+import graphql from './graphql'
+import queue from './queue'
+import seating from './seating'
 import users from './users'
 
 import models from '../models'
@@ -10,6 +11,7 @@ export default async function(app) {
   app.configure(auth)
   app.configure(users)
   app.configure(seating)
+  app.configure(queue)
   app.configure(graphql)
 
   // Synchronize all models afterward
