@@ -4,8 +4,9 @@ export class QueueService {
   async setup(app) {
     this.app = app
 
-    await consume('queues', 'internal.#', this.handleInternalQueue)
-    await consume('queues', 'axi.#', this.handleAxiQueue)
+    await consume('queue', 'axi.#', this.handleAxiQueue)
+    await consume('queue', 'logging.#', this.handleLogging)
+    await consume('amq.topic', '#', this.handleDevice)
   }
 
   async find() {
@@ -14,7 +15,7 @@ export class QueueService {
 
   async create({service, data}) {
     try {
-      const result = await send('queues', service, data)
+      const result = await send('queue', service, data)
 
       return {status: 'QUEUED', data, result}
     } catch (error) {
@@ -22,12 +23,16 @@ export class QueueService {
     }
   }
 
-  handleInternalQueue(data, key) {
-    console.log('[> Internal Queue]', key, data)
-  }
-
   handleAxiQueue(data, key) {
     console.log('[> Axi Queue]', key, data)
+  }
+
+  handleLogging(data, key) {
+    console.log('[> Processed]', key, data)
+  }
+
+  handleDevice(data, key) {
+    console.log('[> Device]', key, data)
   }
 }
 

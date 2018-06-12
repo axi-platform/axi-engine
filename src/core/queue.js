@@ -1,15 +1,25 @@
 import amqplib from 'amqplib'
-import msgpack from 'msgpack'
 
 const open = amqplib.connect('amqp://localhost')
+
+// Serializers
+const pack = data => Buffer.from(JSON.stringify(data))
+
+const unpack = data => {
+  try {
+    return JSON.parse(data.toString())
+  } catch (err) {
+    return data.toString()
+  }
+}
 
 // Publisher
 export async function send(exchange, key, data) {
   const conn = await open
   const ch = await conn.createChannel()
-  const message = msgpack.pack(data)
+  const message = pack(data)
 
-  ch.assertExchange(exchange, 'topic', {durable: false})
+  ch.assertExchange(exchange, 'topic', {durable: true})
 
   return ch.publish(exchange, key, message)
 }
@@ -19,22 +29,20 @@ export async function consume(exchange, key, handle) {
   const conn = await open
   const ch = await conn.createChannel()
 
-  ch.assertExchange(exchange, 'topic', {durable: false})
+  ch.assertExchange(exchange, 'topic', {durable: true})
   ch.prefetch(1)
 
   const {queue} = await ch.assertQueue('', {exclusive: true})
-  console.log('[>] Queue name:', queue)
-
   ch.bindQueue(queue, exchange, key)
 
   async function handler(message) {
     const {content, ...meta} = message
-    const data = msgpack.unpack(content)
+    const data = unpack(content)
 
     await handle(data, meta.fields.routingKey, meta)
 
     return ch.ack(message)
   }
 
-  return ch.consume(queue, handler)
+  return ch.consume(queue, handler, {persistent: true})
 }
