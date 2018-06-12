@@ -1,12 +1,11 @@
-import {Processor, send} from '../core/kafka'
+import {send, consume} from '../core/queue'
 
 export class QueueService {
   async setup(app) {
     this.app = app
 
-    this.processor = new Processor({
-      'queuing.ticket.add': this.addTicket,
-    })
+    await consume('queues', 'internal.#', this.handleInternalQueue)
+    await consume('queues', 'axi.#', this.handleAxiQueue)
   }
 
   async find() {
@@ -15,12 +14,20 @@ export class QueueService {
 
   async create({service, data}) {
     try {
-      const result = await send(`queue.${service}.add`, data)
+      const result = await send('queues', service, data)
 
-      return {status: 'QUEUED', service, data, result}
+      return {status: 'QUEUED', data, result}
     } catch (error) {
       return {status: 'ERROR', error}
     }
+  }
+
+  handleInternalQueue(data, key) {
+    console.log('[> Internal Queue]', key, data)
+  }
+
+  handleAxiQueue(data, key) {
+    console.log('[> Axi Queue]', key, data)
   }
 }
 
