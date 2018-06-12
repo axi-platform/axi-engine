@@ -15,6 +15,8 @@ import services from './services'
 import hooks from './hooks'
 import channels from './channels'
 
+import {runSubscriptionServer} from './services/graphql'
+
 const app = express(feathers())
 
 app.configure(configuration())
@@ -31,9 +33,9 @@ app.use('/', express.static(app.get('public')))
 app.configure(express.rest())
 app.configure(socketio())
 
-app.configure(middleware)
 app.configure(services)
 app.configure(channels)
+app.configure(middleware)
 
 app.use(express.notFound())
 app.use(express.errorHandler({logger}))
@@ -42,8 +44,12 @@ app.hooks(hooks)
 
 const PORT = app.get('port')
 
-app.listen(PORT).on('listening', () => {
+const server = app.listen(PORT)
+
+server.on('listening', () => {
   console.log('[💖]', `The Axi Engine is now listening on Port ${PORT}!`)
+
+  runSubscriptionServer(server)
 })
 
 process.on('unhandledRejection', (reason, promise) => {

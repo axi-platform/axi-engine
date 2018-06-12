@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 # The queries that can be requested
@@ -28,6 +29,11 @@ type Mutation {
     # Ticket Holder's name
     buyer: String!
   ): Ticket
+}
+
+# The subscriptions that can be listened to
+type Subscription {
+  ticketCreated: Ticket
 }
 
 # Ticket contains the seat number and the buyer's name
