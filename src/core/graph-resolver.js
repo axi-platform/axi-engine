@@ -76,22 +76,25 @@ function createMappings(config) {
   }))
 }
 
-function createHandler(app, service, method, options = {}) {
+const out = (result, field) => {
+  if (!result || field === false) return result
+
+  return result[field]
+}
+
+function createResolver(app, service, method, options = {}) {
   const {field = 'data'} = options
 
   const Service = app.service(service)
   if (!Service) throw new Error(`Service ${service} does not exist.`)
 
-  const handle = Service[method].bind(app)
+  // Resolver handles resolving GraphQL calls to Feathers services.
+  return async function resolver(root, data, context, info) {
+    if (method === 'find') {
+      const result = await Service.find({...context, query: data})
 
-  return async (root, data, context, info) => {
-    data.user = context.user
-    data.provider = context.provider
-    context.path = service
-    context.service = service
-
-    console.log('[>] Data is', data)
-    console.log('[>] Context is', context)
+      return out(result, field)
+    }
 
     if (method === 'get') {
       // If options.primary is set, use it as GET's ID parameter
@@ -99,25 +102,21 @@ function createHandler(app, service, method, options = {}) {
         data = data[options.primary]
       }
 
-      if (data.id) data = data.id
-    }
-
-    if (method === 'find') {
-      data = {query: data}
+      // If the query has an ID parameter, use them.
+      if (data.id) {
+        data = data.id
+      }
     }
 
     // Invoke the handler
-    const result = await handle(data, context)
-    // console.log('[+] Result is', result)
+    const result = await Service[method](data, context)
 
-    if (!result) return null
-    if (field === false) return result
-
-    return result[field]
+    return out(result, field)
   }
 }
 
-function createServiceResolver(app, config, customResolver) {
+// Automatically generate GraphQL resolvers for Feathers services.
+function createServiceResolvers(app, config, options = {}) {
   const mappings = createMappings(config)
 
   let Query = {}
@@ -128,25 +127,25 @@ function createServiceResolver(app, config, customResolver) {
     console.debug('[+] Mapping', service, '->', mapping)
 
     Object.entries(mapping).forEach(([method, name]) => {
-      const handler = createHandler(app, service, method, options)
+      const resolver = createResolver(app, service, method, options)
 
-      if (queryMethods.includes(method)) Query[name] = handler
-      if (mutationMethods.includes(method)) Mutation[name] = handler
+      if (queryMethods.includes(method)) Query[name] = resolver
+      if (mutationMethods.includes(method)) Mutation[name] = resolver
     })
   })
 
   // If custom resolvers are present, append them to the generated resolver.
-  if (customResolver) {
-    const custom = customResolver(app)
+  if (options.resolver) {
+    const custom = options.resolver(app)
 
     Query = {...Query, ...custom.Query}
     Mutation = {...Mutation, ...custom.Mutation}
   }
 
-  console.log('[Q]', Query)
-  console.log('[M]', Mutation)
+  console.log('[> Queries]', Query)
+  console.log('[> Mutations]', Mutation)
 
   return {Query, Mutation}
 }
 
-export default createServiceResolver
+export default createServiceResolvers

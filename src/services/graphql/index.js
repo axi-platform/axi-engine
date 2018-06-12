@@ -17,6 +17,7 @@ function formatError(err) {
   return err
 }
 
+// Custom Resolvers for when you need it.
 function resolver(app) {
   const Seating = app.service('seating')
 
@@ -42,7 +43,7 @@ export default function graphql() {
 
   const executableSchema = makeExecutableSchema({
     typeDefs: Schema,
-    resolvers: ServiceResolver(app, config, resolver),
+    resolvers: ServiceResolver(app, config, {resolver}),
   })
 
   function handler(req) {

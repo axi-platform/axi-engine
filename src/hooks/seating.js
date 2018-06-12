@@ -1,8 +1,7 @@
-import auth from '@feathersjs/authentication'
-import checkPermissions from 'feathers-permissions'
 import errors, {FeathersError} from '@feathersjs/errors'
 
 import validate from './validate'
+import authorize from './authorize'
 
 import Ticket from '../models/ticket'
 
@@ -52,20 +51,9 @@ const validateInput = validate({
 
 export default {
   before: {
-    all: [hook => console.log('[+++] Hook BEFORE Ran!')],
-    create: [
-      auth.hooks.authenticate(['jwt', 'local']),
-      hook => console.log('User Hook:', hook.params.user),
-      checkPermissions({roles: ['admin']}),
-      validateInput,
-      preventDuplicateSeat,
-    ],
+    get: [authorize('admin', 'user')],
+    create: [authorize('admin'), validateInput, preventDuplicateSeat],
     update: [validateInput],
     patch: [validateInput],
-  },
-  after: {
-    all(ctx) {
-      console.log('[+++] Hook AFTER Ran!')
-    },
   },
 }
