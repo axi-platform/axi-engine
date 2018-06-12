@@ -4,31 +4,32 @@ import msgpack from 'msgpack'
 const open = amqplib.connect('amqp://localhost')
 
 // Publisher
-export async function send(queue, data) {
+export async function send(exchange, data) {
   const conn = await open
   const ch = await conn.createChannel()
   const message = msgpack.pack(data)
 
-  await ch.assertQueue(queue, {durable: true})
+  await ch.assertExchange(exchange, 'fanout', {durable: false})
 
-  return ch.sendToQueue(queue, message, {persistent: true})
+  return ch.publish(exchange, '', message)
 }
 
 // Consumer
-export async function consume(queue, handle) {
+export async function consume(exchange, handle) {
   const conn = await open
   const ch = await conn.createChannel()
 
-  await ch.assertQueue(queue, {durable: true})
+  await ch.assertExchange(exchange, 'fanout', {durable: false})
 
-  ch.prefetch(1)
+  const {queue} = await ch.assertQueue('', {exclusive: true})
+  console.log('[>] Queue is', queue)
+
+  ch.bindQueue(queue, exchange, '')
 
   async function handler(message) {
     const {content, ...meta} = message
     await handle(msgpack.unpack(content), meta)
-
-    ch.ack(message)
   }
 
-  return ch.consume(queue, handler)
+  return ch.consume(queue, handler, {noAck: true})
 }
