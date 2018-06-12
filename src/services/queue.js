@@ -4,7 +4,7 @@ export class QueueService {
   async setup(app) {
     this.app = app
 
-    await consume('queue', this.handleQueue)
+    await consume('hello', 'world', this.handleQueue)
   }
 
   async find() {
@@ -13,7 +13,7 @@ export class QueueService {
 
   async create({data}) {
     try {
-      const result = await send('queue', data)
+      const result = await send('hello', 'world', data)
 
       return {status: 'QUEUED', data, result}
     } catch (error) {
