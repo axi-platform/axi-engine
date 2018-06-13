@@ -20,7 +20,13 @@ const unpack = data => {
 
 // Retrieves the connection
 function Connection() {
-  const operation = retry.operation()
+  const operation = retry.operation({
+    retries: 5,
+    factor: 1.5,
+    minTimeout: 800,
+    maxTimeout: 6 * 1000,
+    randomize: true,
+  })
 
   return new Promise((resolve, reject) => {
     operation.attempt(async attempt => {
@@ -34,7 +40,7 @@ function Connection() {
 
         return resolve(conn)
       } catch (err) {
-        logger.warn(`[!] AMQP Conn Error: ${err.message}, attempt ${attempt}.`)
+        logger.warn(`AMQP Conn Error: ${err.message}, attempt ${attempt}.`)
 
         if (!operation.retry(err)) {
           return reject(err)
@@ -45,7 +51,7 @@ function Connection() {
 }
 
 async function handleError(err) {
-  logger.warn(`[!] Fatal AMQP Error: ${err.message}`)
+  logger.error(`Fatal AMQP Error: ${err.message}`)
 
   connection = null
 }
