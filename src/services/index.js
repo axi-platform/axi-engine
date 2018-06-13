@@ -1,6 +1,7 @@
 import auth from './auth'
 import graphql from './graphql'
 import queue from './queue'
+import rabbitAuth from './rabbitmq-auth'
 import seating from './seating'
 import users from './users'
 
@@ -12,6 +13,7 @@ export default async function(app) {
   app.configure(users)
   app.configure(seating)
   app.configure(queue)
+  app.configure(rabbitAuth)
   app.configure(graphql)
 
   // Synchronize all models afterward

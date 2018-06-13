@@ -13,36 +13,44 @@ const unpack = data => {
   }
 }
 
+async function Channel() {
+  const conn = await open
+
+  return conn.createChannel()
+}
+
 // Publisher
 export async function send(exchange, key, data) {
-  const conn = await open
-  const ch = await conn.createChannel()
+  const chan = await Channel()
   const message = pack(data)
 
-  ch.assertExchange(exchange, 'topic', {durable: true})
+  chan.assertExchange(exchange, 'topic', {durable: true})
 
-  return ch.publish(exchange, key, message)
+  return chan.publish(exchange, key, message)
 }
 
 // Consumer
 export async function consume(exchange, key, handle) {
-  const conn = await open
-  const ch = await conn.createChannel()
+  const chan = await Channel()
 
-  ch.assertExchange(exchange, 'topic', {durable: true})
-  ch.prefetch(1)
+  chan.assertExchange(exchange, 'topic', {durable: true})
+  chan.prefetch(1)
 
-  const {queue} = await ch.assertQueue('', {exclusive: true})
-  ch.bindQueue(queue, exchange, key)
+  const {queue} = await chan.assertQueue('', {exclusive: true})
+  chan.bindQueue(queue, exchange, key)
 
   async function handler(message) {
     const {content, ...meta} = message
-    const data = unpack(content)
 
-    await handle(data, meta.fields.routingKey, meta)
+    try {
+      const data = unpack(content)
+      await handle(data, meta.fields.routingKey, meta, chan)
 
-    return ch.ack(message)
+      return chan.ack(message)
+    } catch (err) {
+      return chan.nack(message)
+    }
   }
 
-  return ch.consume(queue, handler, {persistent: true})
+  return chan.consume(queue, handler, {persistent: true})
 }

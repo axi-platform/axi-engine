@@ -5,7 +5,6 @@ export class QueueService {
     this.app = app
 
     await consume('queue', 'axi.#', this.handleAxiQueue)
-    await consume('queue', 'logging.#', this.handleLogging)
     await consume('amq.topic', '#', this.handleDevice)
   }
 
@@ -25,10 +24,6 @@ export class QueueService {
 
   handleAxiQueue(data, key) {
     console.log('[> Axi Queue]', key, data)
-  }
-
-  handleLogging(data, key) {
-    console.log('[> Processed]', key, data)
   }
 
   handleDevice(data, key) {
