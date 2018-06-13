@@ -19,5 +19,9 @@
     "username": "guest",
     "password": "guest"
   },
-  "secret": "thisissuperdupersecret"
+  "secret": "thisissuperdupersecret",
+  "redis": {
+    "host": "redis",
+    "port": 6379
+  }
 }
