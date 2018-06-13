@@ -7,5 +7,21 @@
     "default": 10,
     "max": 50
   },
-  "secret": "thisissuperdupersecret"
+  "database": {
+    "host": "postgresql",
+    "port": 5432,
+    "database": "axi",
+    "username": "postgres",
+    "password": "password"
+  },
+  "amqp": "amqp://rabbitmq",
+  "rabbitmq": {
+    "username": "guest",
+    "password": "guest"
+  },
+  "secret": "thisissuperdupersecret",
+  "redis": {
+    "host": "redis",
+    "port": 6379
+  }
 }

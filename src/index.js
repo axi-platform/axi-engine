@@ -10,6 +10,8 @@ import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
 import socketio from '@feathersjs/socketio'
 
+import {port} from 'config'
+
 import middleware from './middleware'
 import services from './services'
 import hooks from './hooks'
@@ -26,12 +28,9 @@ app.use(helmet())
 app.use(compress())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')))
-
-app.use('/', express.static(app.get('public')))
 
 app.configure(express.rest())
-app.configure(socketio())
+app.configure(socketio({wsEngine: 'uws'}))
 
 app.configure(services)
 app.configure(channels)
@@ -42,12 +41,10 @@ app.use(express.errorHandler({logger}))
 
 app.hooks(hooks)
 
-const PORT = app.get('port')
-
-const server = app.listen(PORT)
+const server = app.listen(port)
 
 server.on('listening', () => {
-  console.log('[💖]', `The Axi Engine is now listening on Port ${PORT}!`)
+  console.log('[💖]', `The Axi Engine is now listening on Port ${port}!`)
 
   runSubscriptionServer(server)
 })

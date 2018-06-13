@@ -2,9 +2,7 @@ import ServiceResolver from '../../core/graph-resolver'
 
 // Configuration for the Service Resolver.
 const config = {
-  seating: {
-    alias: 'tickets',
-    primary: 'seat',
+  projects: {
     methods: ['find', 'get', 'create'],
     subscribe: true,
   },
@@ -12,13 +10,7 @@ const config = {
 
 // Custom Resolvers for when you need it.
 function resolver(app) {
-  return {
-    Query: {
-      async hello(root, data, context, info) {
-        return 'Hello, World!'
-      },
-    },
-  }
+  return {}
 }
 
 export default function(app) {

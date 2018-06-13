@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize'
-import path from 'path'
+import {database} from 'config'
 
-const sequelize = new Sequelize('sequelize', '', '', {
-  dialect: 'sqlite',
-  storage: path.resolve(__dirname, '../storage/db.sqlite'),
+const sequelize = new Sequelize({
+  ...database,
+  dialect: 'postgres',
   logging: false,
   operatorsAliases: Sequelize.Op,
   pool: {

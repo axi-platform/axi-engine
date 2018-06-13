@@ -1,10 +1,24 @@
 version: '3.6'
 
 services:
+  axi:
+    build: .
+    volumes:
+      - ./config:/opt/app/config
+      - ./src:/opt/app/src
+      - ./webpack.config.js:/opt/app/webpack.config.js
+      - ./package.json:/opt/app/package.json
+    ports:
+      - 3030:3030
+
   postgresql:
-    image: postgres:latest
+    image: postgres:11-alpine
     volumes:
       - ./storage/postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: axi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
     ports:
       - 5432:5432
 

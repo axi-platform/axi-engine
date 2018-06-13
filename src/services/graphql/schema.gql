@@ -6,44 +6,33 @@ schema {
 
 # The queries that can be requested
 type Query {
-  # List every tickets
-  tickets: [Ticket]
+  # List every projects
+  projects: [Project]
 
-  # Retrieves a ticket corresponding with the seat
-  ticket(
-    # Seat number such as "A5" or "C9"
-    seat: String
-  ): Ticket
-
-  # Hello, World!
-  hello: String
+  # Retrieves a Project corresponding with the seat
+  project(id: ID!): Project
 }
 
 # The mutations that can be performed
 type Mutation {
-  # Creates a ticket booking with seat number and buyer info
-  createTicket(
-    # Seat number such as "A5" or "C9"
-    seat: String!
-
-    # Ticket Holder's name
-    buyer: String!
-  ): Ticket
+  # Creates project
+  createProject: Project
 }
 
 # The subscriptions that can be listened to
 type Subscription {
-  ticketCreated: Ticket
+  projectCreated: Project
 }
 
-# Ticket contains the seat number and the buyer's name
-type Ticket {
+# Project contains the seat number and the buyer's name
+type Project {
   # ID
   id: ID!
 
-  # Seat number such as "A5" or "C9"
-  seat: String!
+  name: String!
+  displayName: String!
 
-  # Ticket Holder's name
-  buyer: String!
+  description: String
+  color: String
+  icon: String
 }

@@ -110,3 +110,11 @@ $RECYCLE.BIN/
 # Others
 lib/
 data/
+
+# Persistent Storage for Docker
+storage
+storage/
+storage/*
+
+# Built Bundles
+dist

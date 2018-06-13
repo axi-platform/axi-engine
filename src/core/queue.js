@@ -1,40 +1,95 @@
 import amqplib from 'amqplib'
-import msgpack from 'msgpack'
+import retry from 'retry'
 
-const open = amqplib.connect('amqp://localhost')
+import {amqp} from 'config'
+
+import logger from '../core/logger'
+
+let connection = amqplib.connect(amqp)
+
+// Serializers
+const pack = data => Buffer.from(JSON.stringify(data))
+
+const unpack = data => {
+  try {
+    return JSON.parse(data.toString())
+  } catch (err) {
+    return data.toString()
+  }
+}
+
+// Retrieves the connection
+function Connection() {
+  const operation = retry.operation({
+    retries: 5,
+    factor: 1.5,
+    minTimeout: 800,
+    maxTimeout: 6 * 1000,
+    randomize: true,
+  })
+
+  return new Promise((resolve, reject) => {
+    operation.attempt(async attempt => {
+      try {
+        if (!connection || attempt > 1) {
+          connection = amqplib.connect(amqp)
+        }
+
+        const conn = await connection
+        conn.once('error', handleError)
+
+        return resolve(conn)
+      } catch (err) {
+        logger.warn(`AMQP Conn Error: ${err.message}, attempt ${attempt}.`)
+
+        if (!operation.retry(err)) {
+          return reject(err)
+        }
+      }
+    })
+  })
+}
+
+async function handleError(err) {
+  logger.error(`Fatal AMQP Error: ${err.message}`)
+
+  connection = null
+}
 
 // Publisher
 export async function send(exchange, key, data) {
-  const conn = await open
-  const ch = await conn.createChannel()
-  const message = msgpack.pack(data)
+  const conn = await Connection()
+  const chan = await conn.createChannel()
+  const message = pack(data)
 
-  ch.assertExchange(exchange, 'topic', {durable: false})
+  chan.assertExchange(exchange, 'topic', {durable: true})
 
-  return ch.publish(exchange, key, message)
+  return chan.publish(exchange, key, message)
 }
 
 // Consumer
 export async function consume(exchange, key, handle) {
-  const conn = await open
-  const ch = await conn.createChannel()
+  const conn = await Connection()
+  const chan = await conn.createChannel()
 
-  ch.assertExchange(exchange, 'topic', {durable: false})
-  ch.prefetch(1)
+  chan.assertExchange(exchange, 'topic', {durable: true})
+  chan.prefetch(1)
 
-  const {queue} = await ch.assertQueue('', {exclusive: true})
-  console.log('[>] Queue name:', queue)
-
-  ch.bindQueue(queue, exchange, key)
+  const {queue} = await chan.assertQueue('', {exclusive: true})
+  chan.bindQueue(queue, exchange, key)
 
   async function handler(message) {
     const {content, ...meta} = message
-    const data = msgpack.unpack(content)
 
-    await handle(data, meta.fields.routingKey, meta)
+    try {
+      const data = unpack(content)
+      await handle(data, meta.fields.routingKey, meta, chan)
 
-    return ch.ack(message)
+      return chan.ack(message)
+    } catch (err) {
+      return chan.nack(message)
+    }
   }
 
-  return ch.consume(queue, handler)
+  return chan.consume(queue, handler, {persistent: true})
 }

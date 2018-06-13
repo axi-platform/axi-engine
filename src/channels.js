@@ -41,7 +41,7 @@ export default function channels(app) {
     // TODO: Restrict events to only authenticated users?
 
     // e.g. to publish all service events to all authenticated users use
-    return app.channel('authenticated')
+    return app.channel('anonymous')
   })
 
   // Here you can also add service specific event publishers
