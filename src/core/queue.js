@@ -1,6 +1,11 @@
 import amqplib from 'amqplib'
+import retry from 'retry'
 
-const open = amqplib.connect('amqp://localhost')
+import {amqp} from 'config'
+
+import logger from '../core/logger'
+
+let connection = amqplib.connect(amqp)
 
 // Serializers
 const pack = data => Buffer.from(JSON.stringify(data))
@@ -13,15 +18,42 @@ const unpack = data => {
   }
 }
 
-async function Channel() {
-  const conn = await open
+// Retrieves the connection
+function Connection() {
+  const operation = retry.operation()
 
-  return conn.createChannel()
+  return new Promise((resolve, reject) => {
+    operation.attempt(async attempt => {
+      try {
+        if (!connection || attempt > 1) {
+          connection = amqplib.connect(amqp)
+        }
+
+        const conn = await connection
+        conn.once('error', handleError)
+
+        return resolve(conn)
+      } catch (err) {
+        logger.warn(`[!] AMQP Conn Error: ${err.message}, attempt ${attempt}.`)
+
+        if (!operation.retry(err)) {
+          return reject(err)
+        }
+      }
+    })
+  })
+}
+
+async function handleError(err) {
+  logger.warn(`[!] Fatal AMQP Error: ${err.message}`)
+
+  connection = null
 }
 
 // Publisher
 export async function send(exchange, key, data) {
-  const chan = await Channel()
+  const conn = await Connection()
+  const chan = await conn.createChannel()
   const message = pack(data)
 
   chan.assertExchange(exchange, 'topic', {durable: true})
@@ -31,7 +63,8 @@ export async function send(exchange, key, data) {
 
 // Consumer
 export async function consume(exchange, key, handle) {
-  const chan = await Channel()
+  const conn = await Connection()
+  const chan = await conn.createChannel()
 
   chan.assertExchange(exchange, 'topic', {durable: true})
   chan.prefetch(1)
