@@ -1,28 +1,10 @@
-import errors from '@feathersjs/errors'
+import SequelizeService from 'feathers-sequelize'
 import local from '@feathersjs/authentication-local'
 
 import Device from '../models/device'
 
-class DeviceService {
-  async setup(app) {
-    this.app = app
-  }
-
-  async find() {
-    const devices = await Device.findAll()
-
-    return {data: devices}
-  }
-
-  async create(data) {
-    const device = await Device.create(data)
-
-    return {data: device}
-  }
-}
-
 export default async function devices() {
-  this.use('devices', new DeviceService())
+  this.use('devices', new SequelizeService({Model: Device}))
 
   this.service('devices').hooks({
     before: {

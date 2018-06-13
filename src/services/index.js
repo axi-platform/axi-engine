@@ -2,6 +2,7 @@ import auth from './auth'
 import graphql from './graphql'
 import queue from './queue'
 import devices from './devices'
+import projects from './projects'
 import rabbitAuth from './rabbitmq-auth'
 import seating from './seating'
 import users from './users'
@@ -15,6 +16,7 @@ export default async function(app) {
   app.configure(seating)
   app.configure(queue)
   app.configure(devices)
+  app.configure(projects)
   app.configure(rabbitAuth)
   app.configure(graphql)
 

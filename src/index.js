@@ -30,7 +30,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
-app.configure(socketio())
+app.configure(socketio({wsEngine: 'uws'}))
 
 app.configure(services)
 app.configure(channels)

@@ -79,13 +79,15 @@ function createMappings(config) {
 }
 
 const out = (result, field) => {
-  if (!result || field === false) return result
+  if (field) {
+    return result[field]
+  }
 
-  return result[field]
+  return result
 }
 
 function createResolver(app, service, method, options = {}) {
-  const {field = 'data'} = options
+  const {field} = options
 
   const Service = app.service(service)
   if (!Service) throw new Error(`Service ${service} does not exist.`)
@@ -94,6 +96,8 @@ function createResolver(app, service, method, options = {}) {
   return async function resolver(root, data, context, info) {
     if (method === 'find') {
       const result = await Service.find({...context, query: data})
+
+      console.log('Result is', result)
 
       return out(result, field)
     }
@@ -136,6 +140,8 @@ function generateEventName(method, entity, options = {}) {
 }
 
 const pprint = data => {
+  if (!data) return null
+
   if (data.toJSON) return data.toJSON()
 
   return data

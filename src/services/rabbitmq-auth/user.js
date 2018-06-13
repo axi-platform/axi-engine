@@ -1,4 +1,5 @@
 import {compare} from 'bcrypt-promised'
+import {rabbitmq as rmq} from 'config'
 
 import logger from '../../core/logger'
 
@@ -25,6 +26,11 @@ export default class UserService {
   }
 
   async create({username, password}) {
+    // TODO: Use proper authentication for internal queue
+    if (username === rmq.username && password === rmq.password) {
+      return 'allow'
+    }
+
     try {
       await verifyUser(this.app, username, password)
       logger.info(`[amqp-auth] Device ${username} has authenticated.`)

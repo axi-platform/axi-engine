@@ -15,5 +15,9 @@
     "password": "password"
   },
   "amqp": "amqp://rabbitmq",
+  "rabbitmq": {
+    "username": "guest",
+    "password": "guest"
+  },
   "secret": "thisissuperdupersecret"
 }
