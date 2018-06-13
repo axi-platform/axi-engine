@@ -1,34 +1,22 @@
-class User {
-  async create({username, password}) {
-    console.log('rabbit-auth/user', username, password)
+import UserService from './user'
 
-    return 'allow'
-  }
+async function vhost({ip, username, vhost}) {
+  console.log('rabbit-auth/vhost', ip, username, vhost)
+
+  return 'allow'
 }
 
-class VHost {
-  async create({ip, username, vhost}) {
-    console.log('rabbit-auth/vhost', ip, username, vhost)
+async function resource({username, vhost, resource, name, permission}) {
+  console.log('rabbit-auth/resource', username, name, resource, permission)
 
-    return 'allow'
-  }
+  return 'allow'
 }
 
-class Resource {
-  async create({username, vhost, resource, name, permission}) {
-    console.log('rabbit-auth/resource', username, name, resource, permission)
+// prettier-ignore
+async function topic({username, vhost, resource, name, permission, routing_key: key}) {
+  console.log('rabbit-auth/topic', username, name, resource, permission, key)
 
-    return 'allow'
-  }
-}
-
-class Topic {
-  async create({username, vhost, resource, name, permission, routing_key}) {
-    // prettier-ignore
-    console.log('rabbit-auth/topic', username, name, resource, permission, routing_key)
-
-    return 'allow'
-  }
+  return 'allow'
 }
 
 function plain(req, res) {
@@ -38,11 +26,12 @@ function plain(req, res) {
 
 export default async function rabbitAuth() {
   // Registers rabbit-auth services
-  const use = (path, Service) =>
-    this.use(`rabbit-auth/${path}`, new Service(), plain)
+  const use = (path, handler) =>
+    this.use(`rabbit-auth/${path}`, {create: handler}, plain)
 
-  use('user', User)
-  use('vhost', VHost)
-  use('resource', Resource)
-  use('topic', Topic)
+  this.use('rabbit-auth/user', new UserService(), plain)
+
+  use('vhost', vhost)
+  use('resource', resource)
+  use('topic', topic)
 }
