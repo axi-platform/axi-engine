@@ -3,7 +3,7 @@ import ServiceResolver from '../../core/graph-resolver'
 // Configuration for the Service Resolver.
 const config = {
   projects: {
-    methods: ['find', 'get', 'create'],
+    methods: ['find', 'get'],
     subscribe: true,
   },
 }
