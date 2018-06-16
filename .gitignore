@@ -112,9 +112,7 @@ lib/
 data/
 
 # Persistent Storage for Docker
-storage
-storage/
-storage/*
+tools/storage
 
 # Built Bundles
 dist

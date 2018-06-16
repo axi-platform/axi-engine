@@ -7,8 +7,9 @@ import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
 import socketio from '@feathersjs/socketio'
 import log from 'feathers-logger'
+import sync from 'feathers-sync'
 
-import {port} from 'config'
+import {port, redis} from 'config'
 
 import hooks from './hooks'
 import services from './services'
@@ -31,7 +32,9 @@ app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
 app.configure(socketio({wsEngine: 'uws'}))
+
 app.configure(log(logger))
+app.configure(sync({uri: redis}))
 
 app.configure(services)
 app.configure(channels)
