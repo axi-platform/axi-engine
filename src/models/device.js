@@ -12,7 +12,7 @@ const Device = sequelize.define('device', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  status: {
+  presence: {
     type: Sequelize.ENUM,
     values: ['online', 'offline'],
     defaultValue: 'offline',

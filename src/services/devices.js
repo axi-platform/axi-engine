@@ -8,11 +8,11 @@ import Device from '../models/device'
 function DeviceController(app) {
   const devices = app.service('devices')
 
-  async function onStatusUpdate(data, key) {
-    console.log('Device Status Update', data)
+  async function onStatusUpdate(data, key, meta) {
+    console.log('[> Device Status Update]', data)
   }
 
-  consume('amq.topic', 'device.status#', onStatusUpdate)
+  consume('amq.topic', 'device.*.status', onStatusUpdate)
 }
 
 export default async function devices() {

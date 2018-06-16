@@ -12,7 +12,7 @@ services:
       - 3030:3030
 
   postgresql:
-    image: postgres:11-alpine
+    build: ./tools/postgresql
     volumes:
       - ./storage/postgresql:/var/lib/postgresql/data
     environment:
@@ -38,5 +38,5 @@ services:
       - 15672:15672
       - 15675:15675
     volumes:
-      - ./config/rabbitmq_plugins:/etc/rabbitmq/enabled_plugins
-      - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./tools/rabbitmq/rabbitmq_plugins:/etc/rabbitmq/enabled_plugins
+      - ./tools/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
