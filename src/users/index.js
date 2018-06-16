@@ -2,7 +2,7 @@ import SequelizeService from 'feathers-sequelize'
 import auth from '@feathersjs/authentication'
 import local from '@feathersjs/authentication-local'
 
-import User from '../models/user'
+import User from './model'
 
 import validate from '../hooks/validate'
 

@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-import sequelize from './index'
+import sequelize from '../common/sequelize'
 
 const User = sequelize.define('user', {
   email: {

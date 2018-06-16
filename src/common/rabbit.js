@@ -3,7 +3,7 @@ import retry from 'retry'
 
 import {amqp} from 'config'
 
-import logger from '../core/logger'
+import logger from './logger'
 
 let connection = amqplib.connect(amqp)
 

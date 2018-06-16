@@ -3,11 +3,11 @@ import graphql from './graphql'
 import queue from './queue'
 import devices from './devices'
 import projects from './projects'
-import rabbitAuth from './rabbitmq-auth'
+import rabbitAuth from './rabbit-auth'
 import seating from './seating'
 import users from './users'
 
-import models from '../models'
+import sequelize from './common/sequelize'
 
 export default async function(app) {
   // Register the services
@@ -22,5 +22,5 @@ export default async function(app) {
 
   // Synchronize all models afterward
   // TODO: Do not force in production!
-  await models.sync({force: false})
+  await sequelize.sync({force: false})
 }

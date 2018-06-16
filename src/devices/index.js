@@ -1,23 +1,12 @@
 import SequelizeService from 'feathers-sequelize'
 import local from '@feathersjs/authentication-local'
 
-import {send, consume} from '../core/queue'
-
-import Device from '../models/device'
-
-function DeviceController(app) {
-  const devices = app.service('devices')
-
-  async function onStatusUpdate(data, key, meta) {
-    console.log('[> Device Status Update]', data)
-  }
-
-  consume('amq.topic', 'device.*.status', onStatusUpdate)
-}
+import Model from './model'
+import Processor from './processor'
 
 export default async function devices() {
   const devices = new SequelizeService({
-    Model: Device,
+    Model,
     paginate: {
       default: 20,
       max: 100,
@@ -25,8 +14,6 @@ export default async function devices() {
   })
 
   this.use('devices', devices)
-
-  DeviceController(this)
 
   this.service('devices').hooks({
     before: {
@@ -36,4 +23,6 @@ export default async function devices() {
       all: [local.hooks.protect('password')],
     },
   })
+
+  Processor(this)
 }

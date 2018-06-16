@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-import sequelize from './index'
+import sequelize from '../common/sequelize'
 
 const Device = sequelize.define('device', {
   name: {

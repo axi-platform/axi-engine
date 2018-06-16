@@ -1,23 +1,23 @@
-import path from 'path'
-import favicon from 'serve-favicon'
 import compress from 'compression'
 import cors from 'cors'
 import helmet from 'helmet'
-import logger from 'winston'
 
 import feathers from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
 import socketio from '@feathersjs/socketio'
+import log from 'feathers-logger'
 
 import {port} from 'config'
 
-import middleware from './middleware'
-import services from './services'
 import hooks from './hooks'
-import channels from './channels'
+import services from './services'
+import channels from './common/channels'
+import middleware from './common/middleware'
 
-import {runSubscriptionServer} from './services/graphql'
+import logger from './common/logger'
+
+import {runSubscriptionServer} from './graphql/subscription'
 
 const app = express(feathers())
 
@@ -31,6 +31,7 @@ app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
 app.configure(socketio({wsEngine: 'uws'}))
+app.configure(log(logger))
 
 app.configure(services)
 app.configure(channels)

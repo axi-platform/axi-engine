@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize'
 
-import sequelize from './index'
+import sequelize from '../common/sequelize'
 
-import {checkSeatFormat} from '../hooks/seating'
+import {checkSeatFormat} from './hooks'
 
 const Ticket = sequelize.define('ticket', {
   buyer: {
