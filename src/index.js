@@ -6,9 +6,7 @@ import feathers from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
 import socketio from '@feathersjs/socketio'
-
 import log from 'feathers-logger'
-import {profiler} from 'feathers-profiler'
 
 import {port} from 'config'
 
@@ -39,7 +37,6 @@ app.configure(services)
 app.configure(channels)
 app.configure(middleware)
 
-app.configure(profiler({logger, stats: 'detail'}))
 app.use(express.notFound())
 app.use(express.errorHandler({logger}))
 
