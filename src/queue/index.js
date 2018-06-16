@@ -1,4 +1,4 @@
-import {send, consume} from '../core/queue'
+import {send, consume} from '../common/rabbit'
 
 export class QueueService {
   async setup(app) {

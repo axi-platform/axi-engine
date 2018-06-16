@@ -1,4 +1,4 @@
-import ServiceResolver from '../../core/graph-resolver'
+import ServiceResolver from './service-resolver'
 
 // Configuration for the Service Resolver.
 const config = {

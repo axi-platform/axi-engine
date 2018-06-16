@@ -1,6 +1,7 @@
 import auth from '@feathersjs/authentication'
 import local from '@feathersjs/authentication-local'
 import jwt from '@feathersjs/authentication-jwt'
+import authManagement from 'feathers-authentication-management'
 
 import {secret} from 'config'
 
@@ -42,10 +43,13 @@ const jwtOptions = {
   session: false,
 }
 
+const managementOptions = {}
+
 export default function() {
   this.configure(auth(authOptions))
   this.configure(jwt(jwtOptions))
   this.configure(local(localOptions))
+  this.configure(authManagement(managementOptions))
 
   this.service('authentication').hooks({
     before: {

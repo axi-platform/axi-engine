@@ -1,7 +1,7 @@
 import errors from '@feathersjs/errors'
 
-import hooks, {checkSeatAvailability} from '../hooks/seating'
-import Ticket from '../models/ticket'
+import hooks, {checkSeatAvailability} from './hooks'
+import Ticket from './model'
 
 export class SeatingService {
   async setup(app) {

@@ -1,7 +1,7 @@
 import R from 'ramda'
 import pluralize from 'pluralize'
 
-import {pubsub} from '../services/graphql'
+import pubsub from './subscription'
 
 const capitalize = text => text.charAt(0).toUpperCase() + text.substr(1)
 

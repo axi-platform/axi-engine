@@ -1,4 +1,4 @@
-import logger from '../core/logger'
+import logger from '../common/logger'
 
 const Logger = () => async ctx => {
   logger.debug(`[>] Hook: ${ctx.type} ${ctx.path}/${ctx.method}`)

@@ -1,21 +1,11 @@
-import errors, {FeathersError} from '@feathersjs/errors'
+import errors from '@feathersjs/errors'
 
-import validate from './validate'
-import authorize from './authorize'
+import {SeatFormatError} from './errors'
 
-import Ticket from '../models/ticket'
+import Ticket from './model'
 
-// When the seat's format is invalid
-export class SeatFormatError extends FeathersError {
-  constructor(seat) {
-    const message =
-      `${seat} is an invalid seat format. ` +
-      `Seats must be in the valid pattern of alphabet followed by number, ` +
-      `such as A3 or C25.`
-
-    super(message, 'InvalidSeatFormat', 400, 'invalid-seat-format', {seat})
-  }
-}
+import validate from '../hooks/validate'
+import authorize from '../hooks/authorize'
 
 // Check the seat format
 const SeatPattern = /^\w\d{1,3}$/
