@@ -1,4 +1,4 @@
-import {BadRequest, GeneralError} from 'feathers-errors'
+import {BadRequest} from 'feathers-errors'
 
 import {fileToURI} from './util'
 
@@ -10,11 +10,7 @@ async function generateURI(ctx) {
       throw new BadRequest('File must be supplied through the uri parameter.')
     }
 
-    try {
-      ctx.data = {uri: await fileToURI(file)}
-    } catch (err) {
-      throw new GeneralError(err)
-    }
+    ctx.data = {uri: await fileToURI(file)}
   }
 }
 

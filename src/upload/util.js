@@ -3,9 +3,8 @@ import dauria from 'dauria'
 export async function fileToURI(file) {
   const buffer = await streamToBuffer(file.stream)
   const type = file.detectedMimeType || file.clientReportedMimeType
-  const uri = dauria.getBase64DataURI(buffer, type)
 
-  return uri
+  return dauria.getBase64DataURI(buffer, type)
 }
 
 const asBuffer = part => (Buffer.isBuffer(part) ? part : Buffer.from(part))
@@ -23,8 +22,10 @@ export function streamToArray(stream) {
   }
 
   return new Promise((resolve, reject) => {
-    // stream is already ended
-    if (!stream.readable) return resolve([])
+    // stream had already ended
+    if (!stream.readable) {
+      return resolve([])
+    }
 
     let arr = []
 
@@ -54,6 +55,7 @@ export function streamToArray(stream) {
 
     function cleanup() {
       arr = null
+
       stream.removeListener('data', onData)
       stream.removeListener('end', onEnd)
       stream.removeListener('error', onEnd)
