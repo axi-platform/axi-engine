@@ -1,8 +1,7 @@
 import redis from 'redis-promisify'
 
-const client = redis.createClient({
-  host: 'redis',
-  port: 6379,
-})
+import {redis as url} from 'config'
+
+const client = redis.createClient({url})
 
 export default client

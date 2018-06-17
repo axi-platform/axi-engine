@@ -14,7 +14,7 @@ services:
   postgresql:
     build: ./tools/postgresql
     volumes:
-      - ./storage/postgresql:/var/lib/postgresql/data
+      - ./tools/storage/postgresql:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: axi
       POSTGRES_USER: postgres
@@ -25,7 +25,7 @@ services:
   redis:
     image: redis:alpine
     volumes:
-      - ./storage/redis:/data
+      - ./tools/storage/redis:/data
     ports:
       - 6379:6379
 

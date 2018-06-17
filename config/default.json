@@ -15,13 +15,10 @@
     "password": "password"
   },
   "amqp": "amqp://rabbitmq",
+  "redis": "redis://redis",
   "rabbitmq": {
     "username": "guest",
     "password": "guest"
   },
-  "secret": "thisissuperdupersecret",
-  "redis": {
-    "host": "redis",
-    "port": 6379
-  }
+  "secret": "thisissuperdupersecret"
 }
