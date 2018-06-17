@@ -1,34 +1,10 @@
-import SequelizeService from 'feathers-sequelize'
-import auth from '@feathersjs/authentication'
-import local from '@feathersjs/authentication-local'
+import {Service} from 'feathers-objection'
 
 import User from './model'
+import hooks from './hooks'
 
-import validate from '../hooks/validate'
+export default function() {
+  this.use('users', new Service({model: User}))
 
-async function defaultRole(ctx) {
-  ctx.data.permissions = 'admin:*'
-}
-
-const validateInput = validate({
-  username: 'string',
-  password: 'string',
-})
-
-export default function users() {
-  this.use('users', new SequelizeService({Model: User}))
-
-  this.service('users').hooks({
-    before: {
-      find: [auth.hooks.authenticate('jwt')],
-      create: [
-        validateInput,
-        defaultRole,
-        local.hooks.hashPassword({passwordField: 'password'}),
-      ],
-    },
-    after: {
-      create: [local.hooks.protect('password')],
-    },
-  })
+  this.service('users').hooks(hooks)
 }

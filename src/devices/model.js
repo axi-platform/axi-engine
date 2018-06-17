@@ -1,30 +1,27 @@
-import Sequelize from 'sequelize'
+import {Model} from 'objection'
 
-import sequelize from '../common/sequelize'
+import knex from '../common/knex'
 
-const Device = sequelize.define('device', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  displayName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  presence: {
-    type: Sequelize.ENUM,
-    values: ['online', 'offline'],
-    defaultValue: 'offline',
-  },
-  position: {
-    type: Sequelize.GEOMETRY('POINT'),
-    allowNull: true,
-  },
-})
+export default class Device extends Model {
+  static tableName = 'devices'
 
-export default Device
+  static jsonSchema = {required: ['name', 'displayName', 'password']}
+}
+
+// prettier-ignore
+export async function createSchema() {
+  const exist = await knex.schema.hasTable('devices')
+
+  if (!exist) {
+    await knex.schema.createTable('devices', t => {
+      t.increments('id').primary()
+      t.string('name').unique().notNullable()
+      t.string('displayName').notNullable()
+      t.string('password').notNullable()
+      t.enum('presence', ['online', 'offline']).defaultTo('offline')
+      t.specificType('position', 'geometry(point, 4326)')
+    })
+  }
+}
+
+createSchema()

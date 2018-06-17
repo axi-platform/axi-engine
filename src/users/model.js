@@ -1,30 +1,26 @@
-import Sequelize from 'sequelize'
+import {Model} from 'objection'
 
-import sequelize from '../common/sequelize'
+import knex from '../common/knex'
 
-const User = sequelize.define('user', {
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: {
-        msg: 'email must be a valid email.',
-      },
-    },
-  },
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    // validate: {checkPasswordStrength},
-  },
-  // comma-separated permissions used in feathers-permissions
-  permissions: {
-    type: Sequelize.STRING,
-  },
-})
+export default class User extends Model {
+  static tableName = 'users'
 
-export default User
+  static jsonSchema = {required: ['email', 'username', 'password']}
+}
+
+// prettier-ignore
+export async function createSchema() {
+  const exist = await knex.schema.hasTable('users')
+
+  if (!exist) {
+    await knex.schema.createTable('users', t => {
+      t.increments('id').primary()
+      t.string('email').unique().notNullable()
+      t.string('username').unique().notNullable()
+      t.string('password').notNullable()
+      t.string('permissions').defaultsTo('user:*')
+    })
+  }
+}
+
+createSchema()

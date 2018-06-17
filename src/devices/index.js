@@ -1,15 +1,13 @@
-import {Service} from 'feathers-sequelize'
+import {Service} from 'feathers-objection'
 import local from '@feathersjs/authentication-local'
 
 import Device from './model'
 import nearest from './nearest'
 import Processor from './processor'
 
-class DeviceService extends Service {}
-
-export default async function devices() {
-  const devices = new DeviceService({
-    Model: Device,
+export default async function() {
+  const devices = new Service({
+    model: Device,
     paginate: {
       default: 20,
       max: 100,

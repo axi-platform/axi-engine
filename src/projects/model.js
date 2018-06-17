@@ -1,29 +1,29 @@
-import Sequelize from 'sequelize'
+import {Model} from 'objection'
 
-import sequelize from '../common/sequelize'
+import knex from '../common/knex'
 
-const Project = sequelize.define('project', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  displayName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  color: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  icon: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-})
+export default class Project extends Model {
+  static tableName = 'projects'
 
-export default Project
+  static jsonSchema = {
+    required: ['name', 'displayName', 'description', 'color', 'icon'],
+  }
+}
+
+// prettier-ignore
+export async function createSchema() {
+  const exist = await knex.schema.hasTable('projects')
+
+  if (!exist) {
+    await knex.schema.createTable('projects', t => {
+      t.increments('id').primary()
+      t.string('name').unique().notNullable()
+      t.string('displayName').notNullable()
+      t.string('description').notNullable()
+      t.string('color').notNullable()
+      t.string('icon').notNullable()
+    })
+  }
+}
+
+createSchema()

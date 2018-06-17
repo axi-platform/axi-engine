@@ -1,7 +1,9 @@
-import knex from 'knex'
+import Knex from 'knex'
+import {Model} from 'objection'
+
 import {database} from 'config'
 
-const pg = knex({
+const knex = Knex({
   client: 'pg',
   connection: {
     ...database,
@@ -9,4 +11,6 @@ const pg = knex({
   },
 })
 
-export default pg
+Model.knex(knex)
+
+export default knex

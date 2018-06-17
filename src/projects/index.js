@@ -1,11 +1,10 @@
-import SequelizeService from 'feathers-sequelize'
+import {Service} from 'feathers-objection'
 
-import Model from './model'
+import Project from './model'
 
-export default function users() {
-  const projects = new SequelizeService({
-    Model,
-
+export default function() {
+  const projects = new Service({
+    model: Project,
     paginate: {
       default: 20,
       max: 100,

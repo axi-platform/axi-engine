@@ -3706,7 +3706,7 @@ feathers-blob@^2.0.1:
     mime-types "^2.1.10"
     uberproto "^2.0.0"
 
-feathers-commons@^0.8.6:
+feathers-commons@^0.8.0, feathers-commons@^0.8.6:
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/feathers-commons/-/feathers-commons-0.8.7.tgz#11c6f25b537745a983e8d61552d7db8932d53782"
 
@@ -3756,11 +3756,30 @@ feathers-hooks@^2.0.1:
     feathers-commons "^0.8.6"
     uberproto "^1.2.0"
 
+feathers-knex@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/feathers-knex/-/feathers-knex-3.1.1.tgz#8d1098953d4d36baac6cbeb2bcef086047f316f7"
+  dependencies:
+    "@feathersjs/commons" "^1.3.0"
+    "@feathersjs/errors" "^3.2.0"
+    debug "^3.1.0"
+    is-plain-object "^2.0.1"
+    uberproto "^2.0.0"
+
 feathers-logger@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/feathers-logger/-/feathers-logger-0.3.2.tgz#9b47f14b21e902ab0c18e70700f18268bbf13892"
   dependencies:
     uberproto "^2.0.0"
+
+feathers-objection@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/feathers-objection/-/feathers-objection-0.8.0.tgz#36a0a5946e022d456f27e72940471f03ae3daca1"
+  dependencies:
+    feathers-errors "^2.4.0"
+    feathers-query-filters "^2.1.0"
+    is-plain-object "^2.0.1"
+    uberproto "^1.2.0"
 
 feathers-permissions@^0.2.1:
   version "0.2.1"
@@ -3774,14 +3793,11 @@ feathers-profiler@^0.1.5:
   dependencies:
     debug "^2.2.0"
 
-feathers-sequelize@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/feathers-sequelize/-/feathers-sequelize-3.1.1.tgz#ed64e0476b21aa19153f013541d2de82c9264245"
+feathers-query-filters@^2.1.0:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/feathers-query-filters/-/feathers-query-filters-2.1.2.tgz#cdb18224db5e19cc0140d528108e0908d5eb0654"
   dependencies:
-    "@feathersjs/commons" "^1.3.0"
-    "@feathersjs/errors" "^3.2.0"
-    lodash.omit "^4.3.0"
-    uberproto "^2.0.0"
+    feathers-commons "^0.8.0"
 
 feathers-sync@^1.0.2:
   version "1.0.2"
@@ -7632,28 +7648,6 @@ send@0.16.2:
     on-finished "~2.3.0"
     range-parser "~1.2.0"
     statuses "~1.4.0"
-
-sequelize@^4.37.10:
-  version "4.37.10"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.37.10.tgz#1ccca570956a5bfe1c4c00abbc927633ca8d12d8"
-  dependencies:
-    bluebird "^3.5.0"
-    cls-bluebird "^2.1.0"
-    debug "^3.1.0"
-    depd "^1.1.0"
-    dottie "^2.0.0"
-    generic-pool "^3.4.0"
-    inflection "1.12.0"
-    lodash "^4.17.1"
-    moment "^2.20.0"
-    moment-timezone "^0.5.14"
-    retry-as-promised "^2.3.2"
-    semver "^5.5.0"
-    terraformer-wkt-parser "^1.1.2"
-    toposort-class "^1.0.1"
-    uuid "^3.2.1"
-    validator "^9.4.1"
-    wkx "^0.4.1"
 
 serialize-javascript@^1.4.0:
   version "1.4.0"
