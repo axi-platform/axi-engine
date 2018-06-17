@@ -8,6 +8,10 @@ const Device = sequelize.define('device', {
     allowNull: false,
     unique: true,
   },
+  displayName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -16,6 +20,10 @@ const Device = sequelize.define('device', {
     type: Sequelize.ENUM,
     values: ['online', 'offline'],
     defaultValue: 'offline',
+  },
+  position: {
+    type: Sequelize.GEOMETRY('POINT'),
+    allowNull: true,
   },
 })
 
