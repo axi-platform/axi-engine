@@ -1,6 +1,4 @@
-import {Model} from 'objection'
-
-import knex from '../common/knex'
+import knex, {Model} from '../common/knex'
 
 export default class User extends Model {
   static tableName = 'users'
@@ -19,6 +17,7 @@ export async function createSchema() {
       t.string('username').unique().notNullable()
       t.string('password').notNullable()
       t.string('permissions').defaultsTo('user:*')
+      t.timestamps()
     })
   }
 }

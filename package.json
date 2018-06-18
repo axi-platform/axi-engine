@@ -59,6 +59,7 @@
     "joi-errors-for-forms": "^0.2.6",
     "kafka-node": "^2.6.1",
     "knex": "^0.14.6",
+    "knex-postgis": "^0.6.0",
     "msgpack": "^1.0.2",
     "multer": "^2.0.0-alpha.6",
     "objection": "^1.1.9",

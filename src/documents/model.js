@@ -1,6 +1,4 @@
-import {Model} from 'objection'
-
-import knex from '../common/knex'
+import knex, {Model} from '../common/knex'
 
 export default class Document extends Model {
   static tableName = 'documents'
@@ -26,6 +24,7 @@ export async function createSchema() {
 
       t.enum('paper_size', paperSize).defaultTo('A4')
       t.enum('paper_type', paperType).defaultTo('thick')
+      t.timestamps()
     })
   }
 }
