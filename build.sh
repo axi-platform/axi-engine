@@ -1,18 +1,21 @@
 #!/bin/bash
 
-# Init empty cache file
+# Initialize Empty Cache File
 if [ ! -f .yarn-cache.tgz ]; then
   echo "Initializing empty .yarn-cache.tgz"
   tar cvzf .yarn-cache.tgz --files-from /dev/null
 fi
 
+# Build the Container
 docker build . -t axi-engine:latest
+
+# Save the Lockfile to Temp
 docker run --rm --entrypoint cat axi-engine:latest /tmp/yarn.lock > /tmp/yarn.lock
 
 if ! diff -q yarn.lock /tmp/yarn.lock > /dev/null  2>&1; then
-  echo "Saving Yarn cache"
-  docker run --rm --entrypoint tar axi-engine:latest czf - `yarn cache dir` > .yarn-cache.tgz
+  echo "Extracting Yarn Cache from Disk"
+  docker run --rm --entrypoint tar axi-engine:latest czf - /usr/local/share/.cache/yarn/v1 > .yarn-cache.tgz
 
-  echo "Saving yarn.lock"
+  echo "Persisting Yarn Lockfile"
   cp /tmp/yarn.lock yarn.lock
 fi
