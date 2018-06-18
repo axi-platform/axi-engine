@@ -17,6 +17,7 @@ import channels from './common/channels'
 import middleware from './common/middleware'
 
 import logger from './common/logger'
+import socket from './common/socket'
 
 import {runSubscriptionServer} from './graphql/subscription'
 
@@ -31,7 +32,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
-app.configure(socketio({wsEngine: 'uws'}))
+
+app.configure(socketio({wsEngine: 'uws'}, socket))
 
 app.configure(log(logger))
 app.configure(sync({uri: redis}))
