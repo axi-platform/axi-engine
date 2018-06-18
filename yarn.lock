@@ -701,6 +701,16 @@
     events "^3.0.0"
     uberproto "^2.0.1"
 
+"@feathersjs/primus@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@feathersjs/primus/-/primus-3.2.1.tgz#966547260344bbbbbe43c12a2ba41ae01b29efd1"
+  dependencies:
+    "@feathersjs/transport-commons" "^4.0.0"
+    debug "^3.1.0"
+    primus "^7.0.0"
+    primus-emitter "^3.1.1"
+    uberproto "^2.0.1"
+
 "@feathersjs/socket-commons@^3.1.2":
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/@feathersjs/socket-commons/-/socket-commons-3.1.5.tgz#c45447f97395b1c93e3c0885a4c35ca84f83667a"
@@ -892,6 +902,14 @@ accepts@~1.3.4, accepts@~1.3.5:
   dependencies:
     mime-types "~2.1.18"
     negotiator "0.6.1"
+
+access-control@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/access-control/-/access-control-1.0.0.tgz#aeba282cee77313e85240163d69e35b29e36d626"
+  dependencies:
+    millisecond "0.1.x"
+    setheader "0.0.x"
+    vary "1.1.x"
 
 acorn-dynamic-import@^3.0.0:
   version "3.0.0"
@@ -1237,6 +1255,10 @@ async@^2.6.0:
 async@~0.2.7:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
+
+asyncemit@~3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/asyncemit/-/asyncemit-3.0.1.tgz#cc3e0fe0da39b53cc15e5b3aa8616ea6a72bd599"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -2707,6 +2729,10 @@ configstore@^3.0.0:
     write-file-atomic "^2.0.0"
     xdg-basedir "^3.0.0"
 
+connected@0.0.x:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/connected/-/connected-0.0.2.tgz#7b5755b216ce31ffabccc38e9f4e1dfc1c3b7c6d"
+
 console-browserify@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-browserify/-/console-browserify-1.1.0.tgz#f0241c45730a9fc6323b206dbf38edc741d0bb10"
@@ -2820,6 +2846,12 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+create-server@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/create-server/-/create-server-1.0.1.tgz#164342834f188bbec7c7bc4667463cc2b1304c44"
+  dependencies:
+    connected "0.0.x"
+
 cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -2905,6 +2937,10 @@ dauria@^2.0.0:
   resolved "https://registry.yarnpkg.com/dauria/-/dauria-2.0.0.tgz#cf53b1a5c548b95e73810e8a25d7c12e80767234"
   dependencies:
     iconv-lite "~0.4.13"
+
+debug@0.7.x:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-0.7.4.tgz#06e1ea8082c2cb14e39806e22e2f6f757f92af39"
 
 debug@2.6.9, debug@^2.1.2, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9, debug@~2.6.4, debug@~2.6.6, debug@~2.6.8:
   version "2.6.9"
@@ -3041,7 +3077,7 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
-diagnostics@^1.0.1:
+diagnostics@^1.0.1, diagnostics@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/diagnostics/-/diagnostics-1.1.0.tgz#e1090900b49523e8527be20f081275205f2ae36a"
   dependencies:
@@ -3172,6 +3208,10 @@ elliptic@^6.0.0:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
+
+emits@3.0.x:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/emits/-/emits-3.0.0.tgz#32752bba95e1707b219562384ab9bb8b1fd62f70"
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -3491,7 +3531,7 @@ event-stream@~3.3.0:
     stream-combiner "~0.0.4"
     through "~2.3.1"
 
-eventemitter3@^3.1.0:
+eventemitter3@^3.1.0, eventemitter3@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
 
@@ -3611,6 +3651,10 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
 extend@^3.0.0, extend@~3.0.0, extend@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
+
+extendible@0.1.x:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/extendible/-/extendible-0.1.1.tgz#e2a37ed87129fb4f9533e8a8d7506230a539c905"
 
 external-editor@^2.0.4, external-editor@^2.1.0:
   version "2.1.0"
@@ -4002,6 +4046,10 @@ form-data@~2.3.1:
     combined-stream "1.0.6"
     mime-types "^2.1.12"
 
+forwarded-for@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/forwarded-for/-/forwarded-for-1.0.1.tgz#e7da4814025168ffc0a10d3ff79e1415f46af469"
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -4107,6 +4155,13 @@ function-bind@^1.0.2, function-bind@^1.1.1:
 functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
+
+fusing@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fusing/-/fusing-1.0.0.tgz#550c15d76af9265778aa051ece44d4000a098d45"
+  dependencies:
+    emits "3.0.x"
+    predefine "0.1.x"
 
 gauge@~2.7.3:
   version "2.7.4"
@@ -5958,6 +6013,10 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
+millisecond@0.1.x:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/millisecond/-/millisecond-0.1.2.tgz#6cc5ad386241cab8e78aff964f87028eec92dac5"
+
 "mime-db@>= 1.33.0 < 2", mime-db@~1.33.0:
   version "1.33.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.33.0.tgz#a3492050a5cb9b63450541e39d9788d2272783db"
@@ -6157,6 +6216,10 @@ nan@2.10.0, nan@^2.0.9, nan@^2.10.0, nan@^2.9.2:
 nan@^2.3.0, nan@~2.9.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.9.2.tgz#f564d75f5f8f36a6d9456cca7a6c4fe488ab7866"
+
+nanoid@~1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-1.0.3.tgz#3ff31779301f481baa52a6a31a67c8f6e91949d2"
 
 nanomatch@^1.2.9:
   version "1.2.9"
@@ -6933,6 +6996,12 @@ postgres-interval@^1.1.0:
   dependencies:
     xtend "^4.0.0"
 
+predefine@0.1.x:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/predefine/-/predefine-0.1.2.tgz#2aa92b4496bc1f8554e43a45f76bfbe50d33d37f"
+  dependencies:
+    extendible "0.1.x"
+
 prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
@@ -6956,6 +7025,25 @@ prettier@^1.11.1, prettier@^1.5.3:
 pretty-bytes@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-4.0.2.tgz#b2bf82e7350d65c6c33aa95aaa5a4f6327f61cd9"
+
+primus-emitter@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/primus-emitter/-/primus-emitter-3.1.1.tgz#a85a36353fe8a96975be5edfebd7ee66c84dce1b"
+
+primus@^7.0.0, primus@^7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/primus/-/primus-7.2.2.tgz#0d399115fb5f5e4e9bba4a2a13381d75dfeb8d4e"
+  dependencies:
+    access-control "~1.0.0"
+    asyncemit "~3.0.1"
+    create-server "~1.0.1"
+    diagnostics "~1.1.0"
+    eventemitter3 "~3.1.0"
+    forwarded-for "~1.0.1"
+    fusing "~1.0.0"
+    nanoid "~1.0.2"
+    setheader "~0.0.4"
+    ultron "~1.1.0"
 
 private@^0.1.6, private@^0.1.7, private@~0.1.5:
   version "0.1.8"
@@ -7786,6 +7874,12 @@ set-value@^2.0.0:
     is-extendable "^0.1.1"
     is-plain-object "^2.0.3"
     split-string "^3.0.1"
+
+setheader@0.0.x, setheader@~0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/setheader/-/setheader-0.0.4.tgz#926ed28cf762149620931e7aea3f1b95816ec694"
+  dependencies:
+    debug "0.7.x"
 
 setimmediate@^1.0.4, setimmediate@^1.0.5:
   version "1.0.5"
@@ -8777,7 +8871,7 @@ validatorjs@^3.14.2:
   version "3.14.2"
   resolved "https://registry.yarnpkg.com/validatorjs/-/validatorjs-3.14.2.tgz#b5407743fac0196528277c7ab0bd18e0fabcc3fb"
 
-vary@^1, vary@~1.1.2:
+vary@1.1.x, vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
 

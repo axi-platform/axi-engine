@@ -5,7 +5,6 @@ import helmet from 'helmet'
 import feathers from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
-import socketio from '@feathersjs/socketio'
 import log from 'feathers-logger'
 import sync from 'feathers-sync'
 
@@ -17,7 +16,7 @@ import channels from './common/channels'
 import middleware from './common/middleware'
 
 import logger from './common/logger'
-import socket from './common/socket'
+import primus from './common/primus'
 
 import {runSubscriptionServer} from './graphql/subscription'
 
@@ -32,8 +31,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
-
-app.configure(socketio({wsEngine: 'uws'}, socket))
+app.configure(primus)
 
 app.configure(log(logger))
 app.configure(sync({uri: redis}))
