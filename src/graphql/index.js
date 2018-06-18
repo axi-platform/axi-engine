@@ -9,11 +9,17 @@ import Schema from './schema.gql'
 
 export let execSchema = {}
 
+const CONSTRAINT_ERROR = 'ERR_GRAPHQL_CONSTRAINT_VALIDATION'
+
 // Formats GraphQL errors
 function formatError(err) {
   // If the error is a feathers error
   if (err.originalError instanceof errors.FeathersError) {
     return err.originalError.toJSON()
+  }
+
+  if (err.originalError && err.originalError.code === CONSTRAINT_ERROR) {
+    return err.originalError
   }
 
   return err
