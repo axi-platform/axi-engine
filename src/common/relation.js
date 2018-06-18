@@ -13,7 +13,8 @@ import pluralize from 'pluralize'
 // }
 
 export default class Relation {
-  static belongsTo(modelClass, source) {
+  belongsTo(modelClass) {
+    const source = this.tableName
     const table = modelClass.tableName
     const entity = pluralize.singular(table)
 

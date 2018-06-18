@@ -8,11 +8,6 @@ const config = {
   },
 }
 
-// Custom Resolvers for when you need it.
-function resolver(app) {
-  return {}
-}
-
 export default function(app) {
-  return ServiceResolver(app, config, {resolver})
+  return ServiceResolver(app, config)
 }

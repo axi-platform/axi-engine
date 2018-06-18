@@ -1,5 +1,6 @@
 import R from 'ramda'
 import pluralize from 'pluralize'
+import getFieldNames from 'graphql-list-fields'
 
 import pubsub from './subscription'
 
@@ -87,17 +88,23 @@ const out = (result, field) => {
 }
 
 function createResolver(app, service, method, options = {}) {
-  const {field} = options
+  const {field = 'data'} = options
 
   const Service = app.service(service)
   if (!Service) throw new Error(`Service ${service} does not exist.`)
 
   // Resolver handles resolving GraphQL calls to Feathers services.
   return async function resolver(root, data, context, info) {
-    if (method === 'find') {
-      const result = await Service.find({...context, query: data})
+    const fields = getFieldNames(info)
 
-      console.log('Result is', result)
+    if (method === 'find') {
+      const result = await Service.find({
+        query: {
+          $select: fields,
+          ...data,
+        },
+        ...context,
+      })
 
       return out(result, field)
     }
