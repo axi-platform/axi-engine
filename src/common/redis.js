@@ -1,7 +1,7 @@
-import redis from 'redis-promisify'
+import Redis from 'ioredis'
 
 import {redis as url} from 'config'
 
-const client = redis.createClient({url})
+const redis = new Redis(url)
 
-export default client
+export default redis
