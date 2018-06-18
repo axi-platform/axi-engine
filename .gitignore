@@ -116,3 +116,6 @@ tools/storage
 
 # Built Bundles
 dist
+
+# Yarn Cache
+.yarn-cache.tgz

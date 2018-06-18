@@ -11,6 +11,7 @@ RUN apk update && apk --no-cache add python g++ make
 
 # Install node dependencies
 COPY package.json yarn.lock /tmp/
+COPY .yarn-cache.tgz /
 RUN cd /tmp && yarn --pure-lockfile
 
 # Setup workspace directory
