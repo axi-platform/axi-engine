@@ -76,6 +76,7 @@
     "sql-template-strings": "^2.2.2",
     "sqlite3": "^4.0.0",
     "subscriptions-transport-ws": "^0.9.10",
+    "uws": "^10.148.0",
     "validator": "^10.3.0",
     "validatorjs": "^3.14.2",
     "winston": "^3.0.0-rc2"
