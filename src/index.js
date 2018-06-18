@@ -5,7 +5,6 @@ import helmet from 'helmet'
 import feathers from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import express from '@feathersjs/express'
-import socketio from '@feathersjs/socketio'
 import log from 'feathers-logger'
 import sync from 'feathers-sync'
 
@@ -32,8 +31,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.configure(express.rest())
-
-app.configure(socketio({wsEngine: 'uws'}, socket))
+app.configure(socket)
 
 app.configure(log(logger))
 app.configure(sync({uri: redis}))

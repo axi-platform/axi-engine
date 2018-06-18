@@ -1,4 +1,5 @@
 import Redis from 'socket.io-redis'
+import socketio from '@feathersjs/socketio'
 
 import client from './redis'
 
@@ -7,7 +8,7 @@ const redisAdapter = Redis({
   subClient: client,
 })
 
-export default function socketHandler(io) {
+function handler(io) {
   // Initializes the Redis Adapter for Socket.io
   io.adapter(redisAdapter)
 
@@ -21,3 +22,9 @@ export default function socketHandler(io) {
     next()
   })
 }
+
+const config = {
+  wsEngine: 'uws',
+}
+
+export default socketio(config, handler)
