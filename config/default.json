@@ -10,9 +10,9 @@
   "database": {
     "host": "postgresql",
     "port": 5432,
-    "database": "axi",
-    "username": "postgres",
-    "password": "password"
+    "user": "postgres",
+    "password": "password",
+    "database": "axi"
   },
   "amqp": "amqp://rabbitmq",
   "redis": "redis://redis",

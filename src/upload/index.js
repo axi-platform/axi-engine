@@ -1,7 +1,7 @@
 import fsBlob from 'fs-blob-store'
 import path from 'path'
 import multer from 'multer'
-import {Service} from 'feathers-blob'
+import BlobService from 'feathers-blob'
 
 import hooks from './hooks'
 
@@ -15,7 +15,7 @@ function assignFile(req, res, next) {
 }
 
 export default function upload() {
-  const upload = new Service({Model: BlobStorage})
+  const upload = new BlobService({Model: BlobStorage})
   this.use('upload', multipart.single('uri'), assignFile, upload)
 
   this.service('upload').hooks(hooks)
