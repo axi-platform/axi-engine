@@ -7,7 +7,7 @@ if [ ! -f .yarn-cache.tgz ]; then
 fi
 
 # Build the Container
-docker build . -t axi-engine-dev:latest
+docker build -t axi-engine-dev:latest -f Dockerfile.dev .
 
 # Save the Lockfile to Temp
 docker run --rm --entrypoint cat axi-engine-dev:latest /tmp/yarn.lock > /tmp/yarn.lock
