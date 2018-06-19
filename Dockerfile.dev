@@ -24,7 +24,7 @@ COPY src $APP/src
 # Build the bundle
 RUN npx webpack
 
-# USER node
-EXPOSE 3000
+# Expose Port
+EXPOSE 3030
 
 CMD ["yarn", "start"]

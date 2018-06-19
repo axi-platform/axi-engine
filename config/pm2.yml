@@ -1,0 +1,4 @@
+apps:
+  - name: 'app'
+    script: 'index.js'
+    instance_var: 'INSTANCE_ID'

@@ -119,3 +119,6 @@ dist
 
 # Yarn Cache
 .yarn-cache.tgz
+
+# Production Configuration
+config/production.json

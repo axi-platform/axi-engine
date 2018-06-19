@@ -1,4 +1,4 @@
-import {NotFound} from 'feathers-errors'
+import {NotFound} from '@feathersjs/errors'
 
 import knex from '../common/knex'
 

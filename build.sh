@@ -7,14 +7,14 @@ if [ ! -f .yarn-cache.tgz ]; then
 fi
 
 # Build the Container
-docker build . -t axi-engine:latest
+docker build . -t axi-engine-dev:latest
 
 # Save the Lockfile to Temp
-docker run --rm --entrypoint cat axi-engine:latest /tmp/yarn.lock > /tmp/yarn.lock
+docker run --rm --entrypoint cat axi-engine-dev:latest /tmp/yarn.lock > /tmp/yarn.lock
 
 if ! diff -q yarn.lock /tmp/yarn.lock > /dev/null  2>&1; then
   echo "Extracting Yarn Cache from Disk"
-  docker run --rm --entrypoint tar axi-engine:latest czf - /usr/local/share/.cache/yarn/v1 > .yarn-cache.tgz
+  docker run --rm --entrypoint tar axi-engine-dev:latest czf - /usr/local/share/.cache/yarn/v1 > .yarn-cache.tgz
 
   echo "Persisting Yarn Lockfile"
   cp /tmp/yarn.lock yarn.lock

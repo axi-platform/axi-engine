@@ -1,5 +1,24 @@
 {
-  "host": "axi-engine-app.feathersjs.com",
-  "port": "8080",
-  "secret": "pleasechangemefam"
+  "host": "localhost",
+  "port": 3030,
+  "loglevel": "info",
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "database": {
+    "host": "postgresql",
+    "port": 5432,
+    "user": "postgres",
+    "password": "A69MmEMetXQ8FwFqVMA4As4MtoHyf",
+    "database": "axi"
+  },
+  "amqp": "amqp://rabbitmq",
+  "redis": "redis://redis",
+  "rabbitmq": {
+    "username": "guest",
+    "password": "guest"
+  },
+  "secret": "zRXg2PYnCZQrMGdRikFDLP%/9QQ3/@vMj4c$iZ7A"
 }

@@ -1,5 +1,5 @@
 import local from '@feathersjs/authentication-local'
-import errors from 'feathers-errors'
+import errors from '@feathersjs/errors'
 
 async function convertGeometry(ctx) {
   const {data} = ctx

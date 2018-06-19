@@ -1,4 +1,4 @@
-import {BadRequest} from 'feathers-errors'
+import {BadRequest} from '@feathersjs/errors'
 
 import {fileToURI} from './util'
 

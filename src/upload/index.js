@@ -7,7 +7,7 @@ import hooks from './hooks'
 
 const multipart = multer()
 
-const BlobStorage = fsBlob(path.join(__dirname, '/public/uploads'))
+const BlobStorage = fsBlob(path.join(__dirname, '/uploads'))
 
 function assignFile(req, res, next) {
   req.feathers.file = req.file

@@ -3,6 +3,7 @@ version: '3.6'
 services:
   axi:
     build: .
+    dockerfile: Dockerfile.dev
     volumes:
       - ./config:/opt/app/config
       - ./src:/opt/app/src
