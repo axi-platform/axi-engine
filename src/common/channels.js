@@ -11,7 +11,7 @@ export default function channels(app) {
   app.on('login', (authResult, {connection}) => {
     if (connection) {
       // Obtain the logged in user from the connection
-      const user = connection.user
+      // const {user} = connection
 
       // The connection is no longer anonymous, remove it
       app.channel('anonymous').leave(connection)

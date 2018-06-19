@@ -1,2 +1,2 @@
 main:
-	echo "--snip-- TODO: run daemons"
+	docker-compose up -d
