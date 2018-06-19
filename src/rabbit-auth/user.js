@@ -1,5 +1,4 @@
 import {compare} from 'bcrypt-promised'
-import {rabbitmq as rmq} from 'config'
 
 async function verifyUser(app, name, password) {
   const Device = app.service('devices')
@@ -25,7 +24,7 @@ export default class UserService {
 
   async create({username, password}) {
     // TODO: Use proper authentication for internal queue
-    if (username === rmq.username && password === rmq.password) {
+    if (username === 'guest' && password === 'guest') {
       return 'allow'
     }
 

@@ -58,11 +58,8 @@ COPY --from=build $build/dist $app/
 # Copy the node_modules over from the build phase
 COPY --from=build $build/node_modules $app/node_modules
 
-# Copy the package.json and yarn lockfiles over
-COPY package.json yarn.lock $app/
-
-# Copy the configuration files needed for production deployments
-COPY config/ $app/config/
+# Copy the configuration files over
+COPY package.json yarn.lock pm2.yml $app/
 
 # Configure the file uploads directory
 RUN cd $app && mkdir uploads && chmod -R 744 uploads && chown -R node:node uploads
@@ -80,4 +77,4 @@ EXPOSE 3030
 VOLUME $app/uploads
 
 # Start PM2 runtime
-CMD ["pm2-runtime", "config/pm2.yml"]
+CMD ["pm2-runtime", "pm2.yml"]

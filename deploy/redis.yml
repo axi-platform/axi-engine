@@ -1,0 +1,10 @@
+usePassword: false
+cluster:
+  enabled: true
+  slaveCount: 2
+master:
+  port: 6379
+  persistence:
+    enabled: false
+    # storageClass: "local-storage"
+    # subpath: "/redis"

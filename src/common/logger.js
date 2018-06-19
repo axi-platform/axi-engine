@@ -1,8 +1,8 @@
 import winston from 'winston'
-import {loglevel} from 'config'
+import {LOG_LEVEL} from './config'
 
 const logger = winston.createLogger({
-  level: loglevel,
+  level: LOG_LEVEL,
   prettyPrint: true,
   colorize: true,
   silent: false,

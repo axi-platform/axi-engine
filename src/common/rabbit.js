@@ -1,11 +1,11 @@
 import amqplib from 'amqplib'
 import retry from 'retry'
 
-import {amqp} from 'config'
+import {RABBITMQ_URL} from './config'
 
 import logger from './logger'
 
-let connection = amqplib.connect(amqp)
+let connection = amqplib.connect(RABBITMQ_URL)
 
 // Serializers
 const pack = data => Buffer.from(JSON.stringify(data))
@@ -32,7 +32,7 @@ function Connection() {
     operation.attempt(async attempt => {
       try {
         if (!connection || attempt > 1) {
-          connection = amqplib.connect(amqp)
+          connection = amqplib.connect(RABBITMQ_URL)
         }
 
         const conn = await connection

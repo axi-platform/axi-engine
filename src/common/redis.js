@@ -1,7 +1,7 @@
 import Redis from 'ioredis'
 
-import {redis as url} from 'config'
+import {REDIS_URL} from './config'
 
-const redis = new Redis(url)
+const redis = new Redis(REDIS_URL)
 
 export default redis

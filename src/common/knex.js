@@ -2,7 +2,7 @@ import Knex from 'knex'
 import KnexPostgis from 'knex-postgis'
 import {Model, knexSnakeCaseMappers} from 'objection'
 
-import {database} from 'config'
+import {database} from './config'
 
 // Initialize Knex Instance
 const knex = Knex({

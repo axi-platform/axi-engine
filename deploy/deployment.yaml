@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: axi-engine
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: axi-engine
+    spec:
+      containers:
+      - name: axi-engine
+        image: phoomparin/axi-engine:v1
+        ports:
+        - containerPort: 3030
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

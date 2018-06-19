@@ -3,10 +3,10 @@ import local from '@feathersjs/authentication-local'
 import jwt from '@feathersjs/authentication-jwt'
 import authManagement from 'feathers-authentication-management'
 
-import {secret} from 'config'
+import {SECRET} from '../common/config'
 
 const authOptions = {
-  secret,
+  secret: SECRET,
   path: '/authentication',
   header: 'Authorization',
   entity: 'user',

@@ -2,15 +2,26 @@ version: '3.6'
 
 services:
   axi:
-    build: .
-    dockerfile: Dockerfile.dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./config:/opt/app/config
       - ./src:/opt/app/src
       - ./webpack.config.js:/opt/app/webpack.config.js
       - ./package.json:/opt/app/package.json
     ports:
       - 3030:3030
+    environment:
+      PORT: 3030
+      SECRET: "8PH8vbJoQAg?TN^k29/DzrLkMMiWzmEZ(8"
+      LOG_LEVEL: info
+      DATABASE: axi
+      DB_HOST: postgresql
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      RABBITMQ_URL: "amqp://rabbitmq"
+      REDIS_URL: "redis://redis"
 
   postgresql:
     build: ./tools/postgresql
