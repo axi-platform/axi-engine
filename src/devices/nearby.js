@@ -7,16 +7,14 @@ const sql = x => x.join('')
 const query = sql`
   SELECT *
   FROM (
-    SELECT id, name,
-      ST_X(position) AS longitude,
-      ST_Y(position) AS latitude,
+    SELECT id, name, longitude, latitude,
       display_name AS "displayName",
       6371 * acos(
         cos(radians(?)) *
-        cos(radians(ST_X(position))) *
-        cos(radians(?) - radians(ST_Y(position))) +
+        cos(radians(longitude)) *
+        cos(radians(?) - radians(latitude)) +
         sin(radians(?)) *
-        sin(radians(ST_X(position)))
+        sin(radians(longitude))
       ) AS distance
     FROM devices
   ) AS d
