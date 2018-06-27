@@ -14,9 +14,19 @@ function assignFile(req, res, next) {
   next()
 }
 
+function contentType(req, res, next) {
+  const {mediaType} = res.hook
+
+  if (mediaType) {
+    return res.type(mediaType).end(res.data)
+  }
+
+  next()
+}
+
 export default function upload() {
   const upload = new BlobService({Model: BlobStorage})
-  this.use('upload', multipart.single('uri'), assignFile, upload)
+  this.use('upload', multipart.single('uri'), assignFile, upload, contentType)
 
   this.service('upload').hooks(hooks)
 }

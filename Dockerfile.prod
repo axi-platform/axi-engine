@@ -1,5 +1,5 @@
 # ======================= Stage 0: Build Phase =======================
-FROM node:9-alpine as build
+FROM node:10-alpine as build
 MAINTAINER Phoomparin Mano <phoomparin@gmail.com>
 
 # Setup the build directory
@@ -36,7 +36,7 @@ RUN npx webpack
 RUN cd /tmp && yarn --production --prefer-offline --ignore-scripts
 
 # ======================= Stage 1: Production Phase =======================
-FROM node:9-alpine
+FROM node:10-alpine
 
 # Set the node environment to production mode
 ENV NODE_ENV production
