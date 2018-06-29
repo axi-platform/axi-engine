@@ -1,38 +1,43 @@
-import {send, consume} from '../common/rabbit'
+import {Service} from 'feathers-objection'
 
-export class QueueService {
-  async setup(app) {
-    this.app = app
+import Queue from './model'
 
-    await consume('queue', 'axi.#', this.handleAxiQueue)
-    await consume('amq.topic', '#', this.handleDevice)
-  }
+import {send} from '../common/rabbit'
 
-  async find() {
-    return {status: 'ACTIVE'}
-  }
+class QueueManager extends Service {
+  async patch(id, data, params) {
+    const {status} = data
+    const queue = await super.patch(id, data, params)
 
-  async create({service, data}) {
-    try {
-      const result = await send('queue', service, data)
-
-      return {status: 'QUEUED', data, result}
-    } catch (error) {
-      return {status: 'ERROR', error}
+    if (status === 'completed' || status === 'next') {
+      await this.next(queue)
     }
+
+    return queue
   }
 
-  handleAxiQueue(data, key) {
-    console.log('[> Axi Queue]', key, data)
-  }
+  async next(prevQueue) {
+    const {service, device} = prevQueue
 
-  handleDevice(data, key) {
-    console.log('[> Device]', key, data)
+    const [queue] = await Queue.query()
+      .where('service', service)
+      .where('device', device)
+      .where('status', 'idle')
+      .orderBy('id', 'desc')
+      .limit(1)
+
+    console.log('Next Queue is', queue)
+
+    this.emit('next', {data: queue})
+    await send('amq.topic', `queue.${service}.${device}.next`, queue)
   }
 }
 
-export default function seating() {
-  this.use('queue', new QueueService())
+export default async function() {
+  const queues = new QueueManager({
+    model: Queue,
+    events: ['next'],
+  })
 
-  // this.service('queue').hooks(hooks)
+  this.use('queues', queues)
 }

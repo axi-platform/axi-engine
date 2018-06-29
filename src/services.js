@@ -1,7 +1,9 @@
 import users from './users'
 import auth from './auth'
 import graphql from './graphql'
+import services from './axi-services'
 import queue from './queue'
+import mqueue from './mqueue'
 import upload from './upload'
 import documents from './documents'
 import devices from './devices'
@@ -12,7 +14,9 @@ export default async function(app) {
   // Register the services
   app.configure(users)
   app.configure(auth)
+  app.configure(services)
   app.configure(queue)
+  app.configure(mqueue)
   app.configure(upload)
   app.configure(documents)
   app.configure(devices)

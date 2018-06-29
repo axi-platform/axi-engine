@@ -13,6 +13,7 @@ export default async function() {
       default: 20,
       max: 100,
     },
+    allowedEager: ['queues'],
   })
 
   this.use('devices/nearby', nearby)
