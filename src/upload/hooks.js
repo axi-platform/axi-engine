@@ -16,11 +16,7 @@ async function generateURI(ctx) {
 }
 
 async function parseURI(ctx) {
-  console.log('Parse URI', ctx.result.id)
-
   const {buffer, text, mediaType} = dauria.parseDataURI(ctx.result.uri)
-  console.log('Parsed Buffer', buffer)
-
   ctx.result = text || buffer
   ctx.mediaType = mediaType
 

@@ -1,4 +1,4 @@
-import {Service} from 'feathers-objection'
+import Service from '../common/objection'
 
 import Model from './model'
 
@@ -10,7 +10,7 @@ class ServiceManager extends Service {
 
 export default async function() {
   const services = new ServiceManager({
-    model: Model,
+    Model: Model,
     allowedEager: 'devices',
   })
 

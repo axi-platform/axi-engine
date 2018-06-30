@@ -1,4 +1,4 @@
-import {Service} from 'feathers-objection'
+import Service from '../common/objection'
 
 import Device from './model'
 import hooks from './hooks'
@@ -8,12 +8,16 @@ import Processor from './processor'
 
 export default async function() {
   const devices = new Service({
-    model: Device,
+    Model: Device,
     paginate: {
       default: 20,
       max: 100,
     },
-    allowedEager: ['queues'],
+    eager: 'queues(remaining)',
+    allowedEager: 'queues',
+    namedEagerFilters: {
+      remaining: q => q.where('status', 'idle').orWhere('status', 'processing'),
+    },
   })
 
   this.use('devices/nearby', nearby)

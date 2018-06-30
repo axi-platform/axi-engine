@@ -1,4 +1,4 @@
-const status = ['idle', 'processing', 'completed', 'canceled']
+const status = ['idle', 'processing', 'completed', 'failed', 'canceled']
 
 // prettier-ignore
 exports.up = async function up(knex) {

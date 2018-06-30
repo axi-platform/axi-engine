@@ -64,6 +64,8 @@ export async function send(exchange, key, data) {
 
   chan.assertExchange(exchange, 'topic', {durable: true})
 
+  console.info('[AMQP Send]', exchange, key, data)
+
   return chan.publish(exchange, key, message)
 }
 
