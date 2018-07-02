@@ -3,6 +3,7 @@ import {compare} from 'bcrypt-promised'
 async function verifyUser(app, name, password) {
   const Device = app.service('devices')
 
+  // prettier-ignore
   const {data: [device]} = await Device.find({
     query: {
       $limit: 1,
@@ -30,11 +31,11 @@ export default class UserService {
 
     try {
       await verifyUser(this.app, username, password)
-      this.app.info(`[amqp-auth] Device ${username} has authenticated.`)
+      this.app.info(`[amqp-auth] Access Granted for ${username}.`)
 
       return 'allow'
     } catch (err) {
-      this.app.warn(`[amqp-auth] Error: ${err.message}`)
+      this.app.warn(`[amqp-auth] Access Denied for ${username}: ${err.message}`)
 
       return 'deny'
     }

@@ -2,15 +2,10 @@ import Service from '../common/objection'
 
 import Model from './model'
 
-class ServiceManager extends Service {
-  async find() {
-    return Model.query().eager('devices')
-  }
-}
-
 export default async function() {
-  const services = new ServiceManager({
+  const services = new Service({
     Model: Model,
+    eager: 'devices',
     allowedEager: 'devices',
   })
 
