@@ -7,6 +7,7 @@ import upload from './upload'
 import documents from './documents'
 import devices from './devices'
 import projects from './projects'
+import debug from './debug'
 import rabbitAuth from './rabbit-auth'
 
 export default async function(app) {
@@ -20,5 +21,6 @@ export default async function(app) {
   app.configure(devices)
   app.configure(projects)
   app.configure(rabbitAuth)
+  app.configure(debug)
   app.configure(graphql)
 }
